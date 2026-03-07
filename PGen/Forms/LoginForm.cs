@@ -1,4 +1,5 @@
 using System.Runtime.Versioning;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using PGen.Auth;
 
@@ -14,9 +15,9 @@ public partial class LoginForm : Form
         InitializeComponent();
     }
 
-    private void btnLogin_Click(object sender, EventArgs e)
+    private async void btnLogin_Click(object sender, EventArgs e)
     {
-        var user = AuthService.Authenticate(txtUser.Text.Trim(), txtPassword.Text);
+        var user = await AuthService.AuthenticateAsync(txtUser.Text.Trim(), txtPassword.Text);
         if (user is null)
         {
             MessageBox.Show(this, "Invalid user name or password.", "Login", MessageBoxButtons.OK, MessageBoxIcon.Error);

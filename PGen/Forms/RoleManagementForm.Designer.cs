@@ -18,7 +18,6 @@ partial class RoleManagementForm
         lstRoles = new ListBox();
         pnlRoleDetails = new Panel();
         grpRights = new GroupBox();
-        // added form-level rights controls
         grpFormRights = new GroupBox();
         chkUserManagement = new CheckBox();
         chkRoleManagement = new CheckBox();
@@ -54,22 +53,25 @@ partial class RoleManagementForm
         lblNewRoleName = new Label();
         pnlRoleDetails.SuspendLayout();
         grpRights.SuspendLayout();
+        grpFormRights.SuspendLayout();
         grpRoleRights.SuspendLayout();
         grpUserRights.SuspendLayout();
         pnlNewRole.SuspendLayout();
         SuspendLayout();
-        
+        // 
         // lstRoles
+        // 
         lstRoles.Dock = DockStyle.Left;
         lstRoles.FormattingEnabled = true;
-        lstRoles.ItemHeight = 15;
         lstRoles.Location = new Point(0, 0);
+        lstRoles.Margin = new Padding(3, 4, 3, 4);
         lstRoles.Name = "lstRoles";
-        lstRoles.Size = new Size(200, 605);
+        lstRoles.Size = new Size(228, 807);
         lstRoles.TabIndex = 0;
         lstRoles.SelectedIndexChanged += lstRoles_SelectedIndexChanged;
-        
+        // 
         // pnlRoleDetails
+        // 
         pnlRoleDetails.Controls.Add(grpRights);
         pnlRoleDetails.Controls.Add(lblDescription);
         pnlRoleDetails.Controls.Add(txtDescription);
@@ -79,245 +81,319 @@ partial class RoleManagementForm
         pnlRoleDetails.Controls.Add(txtRoleId);
         pnlRoleDetails.Controls.Add(btnUpdateRole);
         pnlRoleDetails.Controls.Add(btnDeleteRole);
+        pnlRoleDetails.Controls.Add(btnNewRole);
         pnlRoleDetails.Dock = DockStyle.Fill;
-        pnlRoleDetails.Location = new Point(200, 0);
+        pnlRoleDetails.Location = new Point(228, 0);
+        pnlRoleDetails.Margin = new Padding(3, 4, 3, 4);
         pnlRoleDetails.Name = "pnlRoleDetails";
-        pnlRoleDetails.Padding = new Padding(10);
-        pnlRoleDetails.Size = new Size(600, 605);
+        pnlRoleDetails.Padding = new Padding(11, 13, 11, 13);
+        pnlRoleDetails.Size = new Size(686, 807);
         pnlRoleDetails.TabIndex = 1;
-        
+        // 
         // grpRights
+        // 
         grpRights.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         grpRights.Controls.Add(grpFormRights);
         grpRights.Controls.Add(grpRoleRights);
         grpRights.Controls.Add(grpUserRights);
-        grpRights.Location = new Point(13, 120);
+        grpRights.Location = new Point(15, 160);
+        grpRights.Margin = new Padding(3, 4, 3, 4);
         grpRights.Name = "grpRights";
-        grpRights.Padding = new Padding(5);
-        grpRights.Size = new Size(574, 400);
+        grpRights.Padding = new Padding(6, 7, 6, 7);
+        grpRights.Size = new Size(656, 533);
         grpRights.TabIndex = 7;
         grpRights.TabStop = false;
         grpRights.Text = "Assign Rights";
+        // 
         // grpFormRights
+        // 
         grpFormRights.Controls.Add(chkUserManagement);
         grpFormRights.Controls.Add(chkRoleManagement);
         grpFormRights.Controls.Add(chkPasswordGeneration);
         grpFormRights.Controls.Add(chkManageLicenses);
-        grpFormRights.Location = new Point(5, 25);
+        grpFormRights.Location = new Point(6, 33);
+        grpFormRights.Margin = new Padding(3, 4, 3, 4);
         grpFormRights.Name = "grpFormRights";
-        grpFormRights.Padding = new Padding(3);
-        grpFormRights.Size = new Size(270, 120);
+        grpFormRights.Padding = new Padding(3, 4, 3, 4);
+        grpFormRights.Size = new Size(309, 160);
         grpFormRights.TabIndex = 5;
         grpFormRights.TabStop = false;
         grpFormRights.Text = "Forms";
-
+        // 
         // chkUserManagement
+        // 
         chkUserManagement.AutoSize = true;
-        chkUserManagement.Location = new Point(6, 19);
+        chkUserManagement.Location = new Point(7, 25);
+        chkUserManagement.Margin = new Padding(3, 4, 3, 4);
         chkUserManagement.Name = "chkUserManagement";
-        chkUserManagement.Size = new Size(112, 19);
+        chkUserManagement.Size = new Size(152, 24);
         chkUserManagement.TabIndex = 0;
         chkUserManagement.Text = "User Management";
         chkUserManagement.UseVisualStyleBackColor = true;
-
+        // 
         // chkRoleManagement
+        // 
         chkRoleManagement.AutoSize = true;
-        chkRoleManagement.Location = new Point(6, 38);
+        chkRoleManagement.Location = new Point(7, 51);
+        chkRoleManagement.Margin = new Padding(3, 4, 3, 4);
         chkRoleManagement.Name = "chkRoleManagement";
-        chkRoleManagement.Size = new Size(112, 19);
+        chkRoleManagement.Size = new Size(153, 24);
         chkRoleManagement.TabIndex = 1;
         chkRoleManagement.Text = "Role Management";
         chkRoleManagement.UseVisualStyleBackColor = true;
-
+        // 
         // chkPasswordGeneration
+        // 
         chkPasswordGeneration.AutoSize = true;
-        chkPasswordGeneration.Location = new Point(6, 57);
+        chkPasswordGeneration.Location = new Point(7, 76);
+        chkPasswordGeneration.Margin = new Padding(3, 4, 3, 4);
         chkPasswordGeneration.Name = "chkPasswordGeneration";
-        chkPasswordGeneration.Size = new Size(130, 19);
+        chkPasswordGeneration.Size = new Size(169, 24);
         chkPasswordGeneration.TabIndex = 2;
         chkPasswordGeneration.Text = "Password Generation";
         chkPasswordGeneration.UseVisualStyleBackColor = true;
-
+        // 
         // chkManageLicenses
+        // 
         chkManageLicenses.AutoSize = true;
-        chkManageLicenses.Location = new Point(6, 76);
+        chkManageLicenses.Location = new Point(7, 101);
+        chkManageLicenses.Margin = new Padding(3, 4, 3, 4);
         chkManageLicenses.Name = "chkManageLicenses";
-        chkManageLicenses.Size = new Size(114, 19);
+        chkManageLicenses.Size = new Size(143, 24);
         chkManageLicenses.TabIndex = 3;
         chkManageLicenses.Text = "Manage Licenses";
         chkManageLicenses.UseVisualStyleBackColor = true;
-
-
-        
-        // grpUserRights
-        // detailed user rights hidden by default
-        grpUserRights.Controls.Add(chkDeleteUsers);
-        grpUserRights.Controls.Add(chkEditUsers);
-        grpUserRights.Controls.Add(chkCreateUsers);
-        grpUserRights.Controls.Add(chkViewUsers);
-        grpUserRights.Visible = false;
-        grpUserRights.Location = new Point(5, 25);
-        grpUserRights.Name = "grpUserRights";
-        grpUserRights.Padding = new Padding(3);
-        grpUserRights.Size = new Size(270, 80);
-        grpUserRights.TabIndex = 0;
-        grpUserRights.TabStop = false;
-        grpUserRights.Text = "User Management";
-        
-        // placeholder controls, hidden
-        chkViewUsers.AutoSize = true;
-        chkViewUsers.Location = new Point(6, 19);
-        chkViewUsers.Name = "chkViewUsers";
-        chkViewUsers.Size = new Size(80, 19);
-        chkViewUsers.TabIndex = 0;
-        chkViewUsers.Text = "View Users";
-        chkViewUsers.UseVisualStyleBackColor = true;
-        chkViewUsers.Visible = false;
-        
-        chkCreateUsers.AutoSize = true;
-        chkCreateUsers.Location = new Point(6, 38);
-        chkCreateUsers.Name = "chkCreateUsers";
-        chkCreateUsers.Size = new Size(93, 19);
-        chkCreateUsers.TabIndex = 1;
-        chkCreateUsers.Text = "Create Users";
-        chkCreateUsers.UseVisualStyleBackColor = true;
-        chkCreateUsers.Visible = false;
-        
-        chkEditUsers.AutoSize = true;
-        chkEditUsers.Location = new Point(120, 19);
-        chkEditUsers.Name = "chkEditUsers";
-        chkEditUsers.Size = new Size(80, 19);
-        chkEditUsers.TabIndex = 2;
-        chkEditUsers.Text = "Edit Users";
-        chkEditUsers.UseVisualStyleBackColor = true;
-        chkEditUsers.Visible = false;
-        
-        chkDeleteUsers.AutoSize = true;
-        chkDeleteUsers.Location = new Point(120, 38);
-        chkDeleteUsers.Name = "chkDeleteUsers";
-        chkDeleteUsers.Size = new Size(93, 19);
-        chkDeleteUsers.TabIndex = 3;
-        chkDeleteUsers.Text = "Delete Users";
-        chkDeleteUsers.UseVisualStyleBackColor = true;
-        chkDeleteUsers.Visible = false;
-        
-        // grpRoleRights (granular, hidden)
+        // 
+        // grpRoleRights
+        // 
         grpRoleRights.Controls.Add(chkDeleteRoles);
         grpRoleRights.Controls.Add(chkEditRoles);
         grpRoleRights.Controls.Add(chkCreateRoles);
         grpRoleRights.Controls.Add(chkViewRoles);
-        grpRoleRights.Location = new Point(280, 25);
-        grpRoleRights.Visible = false;
+        grpRoleRights.Location = new Point(320, 33);
+        grpRoleRights.Margin = new Padding(3, 4, 3, 4);
         grpRoleRights.Name = "grpRoleRights";
-        grpRoleRights.Padding = new Padding(3);
-        grpRoleRights.Size = new Size(270, 80);
+        grpRoleRights.Padding = new Padding(3, 4, 3, 4);
+        grpRoleRights.Size = new Size(309, 107);
         grpRoleRights.TabIndex = 1;
         grpRoleRights.TabStop = false;
         grpRoleRights.Text = "Role Management";
-        
-        chkViewRoles.AutoSize = true;
-        chkViewRoles.Location = new Point(6, 19);
-        chkViewRoles.Name = "chkViewRoles";
-        chkViewRoles.Size = new Size(83, 19);
-        chkViewRoles.TabIndex = 0;
-        chkViewRoles.Text = "View Roles";
-        chkViewRoles.UseVisualStyleBackColor = true;
-        chkViewRoles.Visible = false;
-        
-        chkCreateRoles.AutoSize = true;
-        chkCreateRoles.Location = new Point(6, 38);
-        chkCreateRoles.Name = "chkCreateRoles";
-        chkCreateRoles.Size = new Size(96, 19);
-        chkCreateRoles.TabIndex = 1;
-        chkCreateRoles.Text = "Create Roles";
-        chkCreateRoles.UseVisualStyleBackColor = true;
-        chkCreateRoles.Visible = false;
-        
-        chkEditRoles.AutoSize = true;
-        chkEditRoles.Location = new Point(120, 19);
-        chkEditRoles.Name = "chkEditRoles";
-        chkEditRoles.Size = new Size(83, 19);
-        chkEditRoles.TabIndex = 2;
-        chkEditRoles.Text = "Edit Roles";
-        chkEditRoles.UseVisualStyleBackColor = true;
-        chkEditRoles.Visible = false;
-        
+        grpRoleRights.Visible = false;
+        // 
+        // chkDeleteRoles
+        // 
         chkDeleteRoles.AutoSize = true;
-        chkDeleteRoles.Location = new Point(120, 38);
+        chkDeleteRoles.Location = new Point(137, 51);
+        chkDeleteRoles.Margin = new Padding(3, 4, 3, 4);
         chkDeleteRoles.Name = "chkDeleteRoles";
-        chkDeleteRoles.Size = new Size(96, 19);
+        chkDeleteRoles.Size = new Size(115, 24);
         chkDeleteRoles.TabIndex = 3;
         chkDeleteRoles.Text = "Delete Roles";
         chkDeleteRoles.UseVisualStyleBackColor = true;
         chkDeleteRoles.Visible = false;
-        
-
-        
-        
-        
-        
-        // lblRoleId
-        lblRoleId.AutoSize = true;
-        lblRoleId.Location = new Point(13, 15);
-        lblRoleId.Name = "lblRoleId";
-        lblRoleId.Size = new Size(49, 15);
-        lblRoleId.TabIndex = 0;
-        lblRoleId.Text = "Role ID:";
-        
-        txtRoleId.Enabled = false;
-        txtRoleId.Location = new Point(70, 12);
-        txtRoleId.Name = "txtRoleId";
-        txtRoleId.Size = new Size(517, 23);
-        txtRoleId.TabIndex = 1;
-        
-        // lblRoleName
-        lblRoleName.AutoSize = true;
-        lblRoleName.Location = new Point(13, 45);
-        lblRoleName.Name = "lblRoleName";
-        lblRoleName.Size = new Size(72, 15);
-        lblRoleName.TabIndex = 2;
-        lblRoleName.Text = "Role Name:";
-        
-        txtRoleName.Location = new Point(70, 42);
-        txtRoleName.Name = "txtRoleName";
-        txtRoleName.Size = new Size(517, 23);
-        txtRoleName.TabIndex = 3;
-        
+        // 
+        // chkEditRoles
+        // 
+        chkEditRoles.AutoSize = true;
+        chkEditRoles.Location = new Point(137, 25);
+        chkEditRoles.Margin = new Padding(3, 4, 3, 4);
+        chkEditRoles.Name = "chkEditRoles";
+        chkEditRoles.Size = new Size(97, 24);
+        chkEditRoles.TabIndex = 2;
+        chkEditRoles.Text = "Edit Roles";
+        chkEditRoles.UseVisualStyleBackColor = true;
+        chkEditRoles.Visible = false;
+        // 
+        // chkCreateRoles
+        // 
+        chkCreateRoles.AutoSize = true;
+        chkCreateRoles.Location = new Point(7, 51);
+        chkCreateRoles.Margin = new Padding(3, 4, 3, 4);
+        chkCreateRoles.Name = "chkCreateRoles";
+        chkCreateRoles.Size = new Size(114, 24);
+        chkCreateRoles.TabIndex = 1;
+        chkCreateRoles.Text = "Create Roles";
+        chkCreateRoles.UseVisualStyleBackColor = true;
+        chkCreateRoles.Visible = false;
+        // 
+        // chkViewRoles
+        // 
+        chkViewRoles.AutoSize = true;
+        chkViewRoles.Location = new Point(7, 25);
+        chkViewRoles.Margin = new Padding(3, 4, 3, 4);
+        chkViewRoles.Name = "chkViewRoles";
+        chkViewRoles.Size = new Size(103, 24);
+        chkViewRoles.TabIndex = 0;
+        chkViewRoles.Text = "View Roles";
+        chkViewRoles.UseVisualStyleBackColor = true;
+        chkViewRoles.Visible = false;
+        // 
+        // grpUserRights
+        // 
+        grpUserRights.Controls.Add(chkDeleteUsers);
+        grpUserRights.Controls.Add(chkEditUsers);
+        grpUserRights.Controls.Add(chkCreateUsers);
+        grpUserRights.Controls.Add(chkViewUsers);
+        grpUserRights.Location = new Point(6, 33);
+        grpUserRights.Margin = new Padding(3, 4, 3, 4);
+        grpUserRights.Name = "grpUserRights";
+        grpUserRights.Padding = new Padding(3, 4, 3, 4);
+        grpUserRights.Size = new Size(309, 107);
+        grpUserRights.TabIndex = 0;
+        grpUserRights.TabStop = false;
+        grpUserRights.Text = "User Management";
+        grpUserRights.Visible = false;
+        // 
+        // chkDeleteUsers
+        // 
+        chkDeleteUsers.AutoSize = true;
+        chkDeleteUsers.Location = new Point(137, 51);
+        chkDeleteUsers.Margin = new Padding(3, 4, 3, 4);
+        chkDeleteUsers.Name = "chkDeleteUsers";
+        chkDeleteUsers.Size = new Size(114, 24);
+        chkDeleteUsers.TabIndex = 3;
+        chkDeleteUsers.Text = "Delete Users";
+        chkDeleteUsers.UseVisualStyleBackColor = true;
+        chkDeleteUsers.Visible = false;
+        // 
+        // chkEditUsers
+        // 
+        chkEditUsers.AutoSize = true;
+        chkEditUsers.Location = new Point(137, 25);
+        chkEditUsers.Margin = new Padding(3, 4, 3, 4);
+        chkEditUsers.Name = "chkEditUsers";
+        chkEditUsers.Size = new Size(96, 24);
+        chkEditUsers.TabIndex = 2;
+        chkEditUsers.Text = "Edit Users";
+        chkEditUsers.UseVisualStyleBackColor = true;
+        chkEditUsers.Visible = false;
+        // 
+        // chkCreateUsers
+        // 
+        chkCreateUsers.AutoSize = true;
+        chkCreateUsers.Location = new Point(7, 51);
+        chkCreateUsers.Margin = new Padding(3, 4, 3, 4);
+        chkCreateUsers.Name = "chkCreateUsers";
+        chkCreateUsers.Size = new Size(113, 24);
+        chkCreateUsers.TabIndex = 1;
+        chkCreateUsers.Text = "Create Users";
+        chkCreateUsers.UseVisualStyleBackColor = true;
+        chkCreateUsers.Visible = false;
+        // 
+        // chkViewUsers
+        // 
+        chkViewUsers.AutoSize = true;
+        chkViewUsers.Location = new Point(7, 25);
+        chkViewUsers.Margin = new Padding(3, 4, 3, 4);
+        chkViewUsers.Name = "chkViewUsers";
+        chkViewUsers.Size = new Size(102, 24);
+        chkViewUsers.TabIndex = 0;
+        chkViewUsers.Text = "View Users";
+        chkViewUsers.UseVisualStyleBackColor = true;
+        chkViewUsers.Visible = false;
+        // 
         // lblDescription
+        // 
         lblDescription.AutoSize = true;
-        lblDescription.Location = new Point(13, 75);
+        lblDescription.Location = new Point(15, 100);
         lblDescription.Name = "lblDescription";
-        lblDescription.Size = new Size(70, 15);
+        lblDescription.Size = new Size(88, 20);
         lblDescription.TabIndex = 4;
         lblDescription.Text = "Description:";
-        
-        txtDescription.Location = new Point(70, 72);
+        // 
+        // txtDescription
+        // 
+        txtDescription.Location = new Point(109, 96);
+        txtDescription.Margin = new Padding(3, 4, 3, 4);
         txtDescription.Multiline = true;
         txtDescription.Name = "txtDescription";
-        txtDescription.Size = new Size(517, 42);
+        txtDescription.Size = new Size(486, 55);
         txtDescription.TabIndex = 5;
-        
+        // 
+        // lblRoleName
+        // 
+        lblRoleName.AutoSize = true;
+        lblRoleName.Location = new Point(15, 60);
+        lblRoleName.Name = "lblRoleName";
+        lblRoleName.Size = new Size(86, 20);
+        lblRoleName.TabIndex = 2;
+        lblRoleName.Text = "Role Name:";
+        // 
+        // txtRoleName
+        // 
+        txtRoleName.Location = new Point(109, 56);
+        txtRoleName.Margin = new Padding(3, 4, 3, 4);
+        txtRoleName.Name = "txtRoleName";
+        txtRoleName.Size = new Size(486, 27);
+        txtRoleName.TabIndex = 3;
+        // 
+        // lblRoleId
+        // 
+        lblRoleId.AutoSize = true;
+        lblRoleId.Location = new Point(15, 20);
+        lblRoleId.Name = "lblRoleId";
+        lblRoleId.Size = new Size(61, 20);
+        lblRoleId.TabIndex = 0;
+        lblRoleId.Text = "Role ID:";
+        // 
+        // txtRoleId
+        // 
+        txtRoleId.Enabled = false;
+        txtRoleId.Location = new Point(109, 16);
+        txtRoleId.Margin = new Padding(3, 4, 3, 4);
+        txtRoleId.Name = "txtRoleId";
+        txtRoleId.Size = new Size(486, 27);
+        txtRoleId.TabIndex = 1;
+        // 
         // btnUpdateRole
+        // 
         btnUpdateRole.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        btnUpdateRole.Location = new Point(434, 575);
+        btnUpdateRole.Location = new Point(496, 767);
+        btnUpdateRole.Margin = new Padding(3, 4, 3, 4);
         btnUpdateRole.Name = "btnUpdateRole";
-        btnUpdateRole.Size = new Size(75, 23);
+        btnUpdateRole.Size = new Size(86, 31);
         btnUpdateRole.TabIndex = 8;
         btnUpdateRole.Text = "Update";
         btnUpdateRole.UseVisualStyleBackColor = true;
         btnUpdateRole.Click += btnUpdateRole_Click;
-        
+        // 
         // btnDeleteRole
+        // 
         btnDeleteRole.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        btnDeleteRole.Location = new Point(515, 575);
+        btnDeleteRole.Location = new Point(589, 767);
+        btnDeleteRole.Margin = new Padding(3, 4, 3, 4);
         btnDeleteRole.Name = "btnDeleteRole";
-        btnDeleteRole.Size = new Size(75, 23);
+        btnDeleteRole.Size = new Size(86, 31);
         btnDeleteRole.TabIndex = 9;
         btnDeleteRole.Text = "Delete";
         btnDeleteRole.UseVisualStyleBackColor = true;
         btnDeleteRole.Click += btnDeleteRole_Click;
-        
+        // 
+        // btnNewRole
+        // 
+        btnNewRole.Location = new Point(15, 700);
+        btnNewRole.Margin = new Padding(3, 4, 3, 4);
+        btnNewRole.Name = "btnNewRole";
+        btnNewRole.Size = new Size(114, 31);
+        btnNewRole.TabIndex = 7;
+        btnNewRole.Text = "New Role";
+        btnNewRole.UseVisualStyleBackColor = true;
+        btnNewRole.Click += btnNewRole_Click;
+        // 
+        // btnLogout
+        // 
+        btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        btnLogout.Location = new Point(829, 16);
+        btnLogout.Margin = new Padding(3, 4, 3, 4);
+        btnLogout.Name = "btnLogout";
+        btnLogout.Size = new Size(86, 31);
+        btnLogout.TabIndex = 8;
+        btnLogout.Text = "Logout";
+        btnLogout.UseVisualStyleBackColor = true;
+        btnLogout.Click += btnLogout_Click;
+        // 
         // pnlNewRole
+        // 
         pnlNewRole.BackColor = SystemColors.Window;
         pnlNewRole.BorderStyle = BorderStyle.FixedSingle;
         pnlNewRole.Controls.Add(lblNewRoleStatus);
@@ -327,93 +403,89 @@ partial class RoleManagementForm
         pnlNewRole.Controls.Add(lblNewRoleDesc);
         pnlNewRole.Controls.Add(txtNewRoleName);
         pnlNewRole.Controls.Add(lblNewRoleName);
-        pnlNewRole.Location = new Point(250, 250);
+        pnlNewRole.Location = new Point(286, 333);
+        pnlNewRole.Margin = new Padding(3, 4, 3, 4);
         pnlNewRole.Name = "pnlNewRole";
-        pnlNewRole.Padding = new Padding(10);
-        pnlNewRole.Size = new Size(350, 170);
+        pnlNewRole.Padding = new Padding(11, 13, 11, 13);
+        pnlNewRole.Size = new Size(400, 226);
         pnlNewRole.TabIndex = 10;
         pnlNewRole.Visible = false;
-        
-        // lblNewRoleName
-        lblNewRoleName.AutoSize = true;
-        lblNewRoleName.Location = new Point(10, 10);
-        lblNewRoleName.Name = "lblNewRoleName";
-        lblNewRoleName.Size = new Size(72, 15);
-        lblNewRoleName.TabIndex = 0;
-        lblNewRoleName.Text = "Role Name:";
-        
-        txtNewRoleName.Location = new Point(85, 10);
-        txtNewRoleName.Name = "txtNewRoleName";
-        txtNewRoleName.Size = new Size(255, 23);
-        txtNewRoleName.TabIndex = 1;
-        
-        // lblNewRoleDesc
-        lblNewRoleDesc.AutoSize = true;
-        lblNewRoleDesc.Location = new Point(10, 40);
-        lblNewRoleDesc.Name = "lblNewRoleDesc";
-        lblNewRoleDesc.Size = new Size(70, 15);
-        lblNewRoleDesc.TabIndex = 2;
-        lblNewRoleDesc.Text = "Description:";
-        
-        txtNewRoleDesc.Location = new Point(85, 40);
-        txtNewRoleDesc.Multiline = true;
-        txtNewRoleDesc.Name = "txtNewRoleDesc";
-        txtNewRoleDesc.Size = new Size(255, 50);
-        txtNewRoleDesc.TabIndex = 3;
-        
+        // 
         // lblNewRoleStatus
+        // 
         lblNewRoleStatus.AutoSize = true;
-        lblNewRoleStatus.Location = new Point(10, 95);
+        lblNewRoleStatus.Location = new Point(11, 127);
         lblNewRoleStatus.Name = "lblNewRoleStatus";
-        lblNewRoleStatus.Size = new Size(0, 15);
+        lblNewRoleStatus.Size = new Size(0, 20);
         lblNewRoleStatus.TabIndex = 4;
-        
-        // btnCreateRole
-        btnCreateRole.Location = new Point(215, 95);
-        btnCreateRole.Name = "btnCreateRole";
-        btnCreateRole.Size = new Size(60, 23);
-        btnCreateRole.TabIndex = 5;
-        btnCreateRole.Text = "Create";
-        btnCreateRole.UseVisualStyleBackColor = true;
-        btnCreateRole.Click += btnCreateRole_Click;
-        
+        // 
         // btnCancelNewRole
-        btnCancelNewRole.Location = new Point(280, 95);
+        // 
+        btnCancelNewRole.Location = new Point(320, 127);
+        btnCancelNewRole.Margin = new Padding(3, 4, 3, 4);
         btnCancelNewRole.Name = "btnCancelNewRole";
-        btnCancelNewRole.Size = new Size(60, 23);
+        btnCancelNewRole.Size = new Size(69, 31);
         btnCancelNewRole.TabIndex = 6;
         btnCancelNewRole.Text = "Cancel";
         btnCancelNewRole.UseVisualStyleBackColor = true;
         btnCancelNewRole.Click += btnCancelNewRole_Click;
-        
-        // btnNewRole
-        btnNewRole.Location = new Point(13, 525);
-        btnNewRole.Name = "btnNewRole";
-        btnNewRole.Size = new Size(100, 23);
-        btnNewRole.TabIndex = 7;
-        btnNewRole.Text = "New Role";
-        btnNewRole.UseVisualStyleBackColor = true;
-        btnNewRole.Click += btnNewRole_Click;
-        pnlRoleDetails.Controls.Add(btnNewRole);
-        
-        // btnLogout
-        btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        btnLogout.Location = new Point(725, 12);
-        btnLogout.Name = "btnLogout";
-        btnLogout.Size = new Size(75, 23);
-        btnLogout.TabIndex = 8;
-        btnLogout.Text = "Logout";
-        btnLogout.UseVisualStyleBackColor = true;
-        btnLogout.Click += btnLogout_Click;
-        
+        // 
+        // btnCreateRole
+        // 
+        btnCreateRole.Location = new Point(246, 127);
+        btnCreateRole.Margin = new Padding(3, 4, 3, 4);
+        btnCreateRole.Name = "btnCreateRole";
+        btnCreateRole.Size = new Size(69, 31);
+        btnCreateRole.TabIndex = 5;
+        btnCreateRole.Text = "Create";
+        btnCreateRole.UseVisualStyleBackColor = true;
+        btnCreateRole.Click += btnCreateRole_Click;
+        // 
+        // txtNewRoleDesc
+        // 
+        txtNewRoleDesc.Location = new Point(97, 53);
+        txtNewRoleDesc.Margin = new Padding(3, 4, 3, 4);
+        txtNewRoleDesc.Multiline = true;
+        txtNewRoleDesc.Name = "txtNewRoleDesc";
+        txtNewRoleDesc.Size = new Size(291, 65);
+        txtNewRoleDesc.TabIndex = 3;
+        // 
+        // lblNewRoleDesc
+        // 
+        lblNewRoleDesc.AutoSize = true;
+        lblNewRoleDesc.Location = new Point(11, 53);
+        lblNewRoleDesc.Name = "lblNewRoleDesc";
+        lblNewRoleDesc.Size = new Size(88, 20);
+        lblNewRoleDesc.TabIndex = 2;
+        lblNewRoleDesc.Text = "Description:";
+        // 
+        // txtNewRoleName
+        // 
+        txtNewRoleName.Location = new Point(97, 13);
+        txtNewRoleName.Margin = new Padding(3, 4, 3, 4);
+        txtNewRoleName.Name = "txtNewRoleName";
+        txtNewRoleName.Size = new Size(291, 27);
+        txtNewRoleName.TabIndex = 1;
+        // 
+        // lblNewRoleName
+        // 
+        lblNewRoleName.AutoSize = true;
+        lblNewRoleName.Location = new Point(11, 13);
+        lblNewRoleName.Name = "lblNewRoleName";
+        lblNewRoleName.Size = new Size(86, 20);
+        lblNewRoleName.TabIndex = 0;
+        lblNewRoleName.Text = "Role Name:";
+        // 
         // RoleManagementForm
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        // 
+        AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(800, 605);
+        ClientSize = new Size(914, 807);
         Controls.Add(btnLogout);
         Controls.Add(pnlNewRole);
         Controls.Add(pnlRoleDetails);
         Controls.Add(lstRoles);
+        Margin = new Padding(3, 4, 3, 4);
         Name = "RoleManagementForm";
         StartPosition = FormStartPosition.CenterParent;
         Text = "Role Management";
@@ -421,9 +493,8 @@ partial class RoleManagementForm
         pnlRoleDetails.ResumeLayout(false);
         pnlRoleDetails.PerformLayout();
         grpRights.ResumeLayout(false);
-        //grpSettingsRights.ResumeLayout(false);
-        //grpSettingsRights.PerformLayout();
-
+        grpFormRights.ResumeLayout(false);
+        grpFormRights.PerformLayout();
         grpRoleRights.ResumeLayout(false);
         grpRoleRights.PerformLayout();
         grpUserRights.ResumeLayout(false);

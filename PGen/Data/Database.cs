@@ -15,6 +15,16 @@ namespace PGen.Data
         /// <summary>
         /// Returns an open MySqlConnection instance. Caller is responsible for disposal.
         /// </summary>
+        public static async Task<MySqlConnection> CreateConnectionAsync()
+        {
+            var conn = new MySqlConnection(ConnectionString);
+            await conn.OpenAsync();
+            return conn;
+        }
+
+        /// <summary>
+        /// Returns an open MySqlConnection instance. Caller is responsible for disposal.
+        /// </summary>
         public static MySqlConnection CreateConnection()
         {
             var conn = new MySqlConnection(ConnectionString);

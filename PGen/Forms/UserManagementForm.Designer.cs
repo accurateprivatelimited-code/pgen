@@ -36,7 +36,7 @@ namespace PGen
             dgvUsers.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvUsers.Columns.AddRange(new DataGridViewColumn[] { colUser, colRole });
-            dgvUsers.Location = new Point(14, 16);
+            dgvUsers.Location = new Point(14, 42);
             dgvUsers.Margin = new Padding(3, 4, 3, 4);
             dgvUsers.MultiSelect = false;
             dgvUsers.Name = "dgvUsers";
@@ -44,7 +44,7 @@ namespace PGen
             dgvUsers.RowHeadersVisible = false;
             dgvUsers.RowHeadersWidth = 51;
             dgvUsers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvUsers.Size = new Size(526, 347);
+            dgvUsers.Size = new Size(526, 321);
             dgvUsers.TabIndex = 0;
             // 
             // colUser
@@ -80,7 +80,7 @@ namespace PGen
             // btnResetPassword
             // 
             btnResetPassword.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnResetPassword.Location = new Point(114, 380);
+            btnResetPassword.Location = new Point(145, 380);
             btnResetPassword.Margin = new Padding(3, 4, 3, 4);
             btnResetPassword.Name = "btnResetPassword";
             btnResetPassword.Size = new Size(137, 36);
@@ -92,7 +92,7 @@ namespace PGen
             // btnDelete
             // 
             btnDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnDelete.Location = new Point(338, 380);
+            btnDelete.Location = new Point(12, 6);
             btnDelete.Margin = new Padding(3, 4, 3, 4);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(103, 36);
@@ -104,7 +104,7 @@ namespace PGen
             // btnRefresh
             // 
             btnRefresh.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnRefresh.Location = new Point(437, 380);
+            btnRefresh.Location = new Point(425, 380);
             btnRefresh.Margin = new Padding(3, 4, 3, 4);
             btnRefresh.Name = "btnRefresh";
             btnRefresh.Size = new Size(103, 36);
@@ -116,7 +116,7 @@ namespace PGen
             // btnEdit
             // 
             btnEdit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnEdit.Location = new Point(239, 380);
+            btnEdit.Location = new Point(303, 380);
             btnEdit.Margin = new Padding(3, 4, 3, 4);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(103, 36);
@@ -128,9 +128,9 @@ namespace PGen
             // btnLogout
             // 
             btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnLogout.Location = new Point(478, 12);
+            btnLogout.Location = new Point(465, 12);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(75, 23);
+            btnLogout.Size = new Size(75, 30);
             btnLogout.TabIndex = 5;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = true;

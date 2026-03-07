@@ -1,4 +1,5 @@
 using System.Runtime.Versioning;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using PGen.Auth;
 using PGen.Security;
@@ -9,13 +10,13 @@ namespace PGen
     {
         [STAThread]
         [SupportedOSPlatform("windows")]
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             // initial user setup (creates admin account if needed)
-            AuthService.EnsureDefaultUsers();
+            await AuthService.EnsureDefaultUsersAsync();
 
             while (true)
             {

@@ -1,4 +1,5 @@
 using System.Runtime.Versioning;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using PGen.Auth;
 
@@ -32,15 +33,15 @@ public partial class RoleManagementForm : Form
         chkManageLicenses.Enabled = hasEditRoles;
     }
 
-    private void RoleManagementForm_Load(object sender, EventArgs e)
+    private async void RoleManagementForm_Load(object sender, EventArgs e)
     {
-        RefreshRolesList();
+        await RefreshRolesList();
     }
 
-    private void RefreshRolesList()
+    private async Task RefreshRolesList()
     {
         lstRoles.Items.Clear();
-        var roles = RoleService.GetRoles();
+        var roles = await RoleService.GetRolesAsync();
         foreach (var role in roles)
         {
             lstRoles.Items.Add(role);
@@ -148,7 +149,7 @@ public partial class RoleManagementForm : Form
         txtNewRoleName.Focus();
     }
 
-    private void btnCreateRole_Click(object sender, EventArgs e)
+    private async void btnCreateRole_Click(object sender, EventArgs e)
     {
         var roleName = txtNewRoleName.Text.Trim();
         if (roleName.Length == 0)
@@ -165,10 +166,10 @@ public partial class RoleManagementForm : Form
             // a role and its permissions in one step rather than having to create it
             // first and then edit it.
             var rights = GetSelectedRights();
-            RoleService.CreateRole(roleName, rights, txtNewRoleDesc.Text.Trim());
+            await RoleService.CreateRoleAsync(roleName, rights, txtNewRoleDesc.Text.Trim());
             lblNewRoleStatus.Text = "Role created successfully.";
             lblNewRoleStatus.ForeColor = Color.Green;
-            RefreshRolesList();
+            await RefreshRolesList();
             pnlNewRole.Visible = false;
         }
         catch (Exception ex)
@@ -183,7 +184,7 @@ public partial class RoleManagementForm : Form
         pnlNewRole.Visible = false;
     }
 
-    private void btnUpdateRole_Click(object sender, EventArgs e)
+    private async void btnUpdateRole_Click(object sender, EventArgs e)
     {
 
         if (_selectedRole is null)
@@ -195,9 +196,9 @@ public partial class RoleManagementForm : Form
         try
         {
             var rights = GetSelectedRights();
-            RoleService.UpdateRole(_selectedRole.Id, txtRoleName.Text.Trim(), rights, txtDescription.Text.Trim());
+            await RoleService.UpdateRoleAsync(_selectedRole.Id, txtRoleName.Text.Trim(), rights, txtDescription.Text.Trim());
             MessageBox.Show(this, "Role updated successfully.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            RefreshRolesList();
+            await RefreshRolesList();
         }
         catch (Exception ex)
         {
@@ -205,7 +206,7 @@ public partial class RoleManagementForm : Form
         }
     }
 
-    private void btnDeleteRole_Click(object sender, EventArgs e)
+    private async void btnDeleteRole_Click(object sender, EventArgs e)
     {
 
         if (_selectedRole is null)
@@ -220,9 +221,9 @@ public partial class RoleManagementForm : Form
 
         try
         {
-            RoleService.DeleteRole(_selectedRole.Id);
+            await RoleService.DeleteRoleAsync(_selectedRole.Id);
             MessageBox.Show(this, "Role deleted successfully.", "Delete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            RefreshRolesList();
+            await RefreshRolesList();
             ClearRoleDetails();
         }
         catch (Exception ex)

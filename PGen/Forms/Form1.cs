@@ -115,7 +115,7 @@ namespace PGen
                 try
                 {
                     var sessionId = Guid.NewGuid().ToString();
-                    PGen.Data.MeterKeyRepository.SaveRows(deduped, sessionId);
+                    await PGen.Data.MeterKeyRepository.SaveRowsAsync(deduped, sessionId);
                     toolStatus.Text = $"Done. {GroupRows(_rows).Count:N0} MSN(s), {_rows.Count:N0} keys (saved to DB)";
                 }
                 catch (Exception dbex)
@@ -196,9 +196,9 @@ namespace PGen
                     toolStatus.Text = $"Copied {gr.Sets.Count} set(s) to clipboard.";
                     break;
                     
-                case "colEdit":
-                    EditGroupRow(gr);
-                    break;
+                //case "colEdit":
+                //    EditGroupRow(gr);
+                //    break;
                     
                 case "colDelete":
                     DeleteGroupRow(gr);
@@ -377,7 +377,7 @@ namespace PGen
             // Don't automatically open any more dialogs
         }
 
-        private void EditGroupRow(MeterKeyGroupRow gr)
+        private async void EditGroupRow(MeterKeyGroupRow gr)
         {
             // Edit first set; user can re-edit for others if needed
             var first = gr.Sets.OrderBy(s => s.SetIndex).First();
@@ -392,7 +392,7 @@ namespace PGen
                     toolStatus.Text = "Row updated successfully.";
                     try
                     {
-                        MeterKeyRepository.UpdateRow(first, dlg.UpdatedRow);
+                        await MeterKeyRepository.UpdateRowAsync(first, dlg.UpdatedRow);
                     }
                     catch
                     {
@@ -402,7 +402,7 @@ namespace PGen
             }
         }
 
-        private void DeleteGroupRow(MeterKeyGroupRow gr)
+        private async void DeleteGroupRow(MeterKeyGroupRow gr)
         {
             var result = MessageBox.Show(this, $"Are you sure you want to delete all {gr.Sets.Count} set(s) for MSN {gr.Msn}?", 
                 "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -415,8 +415,8 @@ namespace PGen
                 toolStatus.Text = "Row(s) deleted successfully.";
                 try
                 {
-                    foreach (var r in gr.Sets)
-                        MeterKeyRepository.DeleteRow(r);
+                    // Use bulk delete for better performance
+                    await MeterKeyRepository.DeleteRowsAsync(gr.Sets);
                 }
                 catch
                 {
@@ -474,7 +474,7 @@ namespace PGen
                 .ToList();
         }
 
-        private void ApplyFilter()
+        private async void ApplyFilter()
         {
             var searchText = txtSearch.Text.Trim();
             var filterField = cboFilterField.SelectedItem?.ToString() ?? "All Fields";
@@ -485,7 +485,7 @@ namespace PGen
             {
                 try
                 {
-                    var dbRows = MeterKeyRepository.QueryRows(filterField, searchText);
+                    var dbRows = await MeterKeyRepository.QueryRowsAsync(filterField, searchText);
                     filteredRows = DeduplicateRows(dbRows);
                 }
                 catch

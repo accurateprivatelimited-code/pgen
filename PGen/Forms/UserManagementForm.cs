@@ -1,4 +1,5 @@
 using System.Runtime.Versioning;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using PGen.Auth;
 
@@ -15,28 +16,33 @@ public partial class UserManagementForm : Form
         InitializeComponent();
     }
 
-    private void ReloadUsers()
+    private async Task ReloadUsers()
     {
         dgvUsers.AutoGenerateColumns = false;
-        var users = AuthService.GetUsers().ToList();
+        var users = await AuthService.GetUsersAsync();
         
         // Enrich users with role names
-        var enrichedUsers = users.Select(u => new
+        var enrichedUsers = new List<object>();
+        foreach (var u in users)
         {
-            u.UserName,
-            RoleName = RoleService.GetRole(u.RoleId)?.Name ?? "Unknown",
-            u.RoleId
-        }).ToList();
+            var role = await RoleService.GetRoleAsync(u.RoleId);
+            enrichedUsers.Add(new
+            {
+                u.UserName,
+                RoleName = role?.Name ?? "Unknown",
+                u.RoleId
+            });
+        }
         
         dgvUsers.DataSource = enrichedUsers;
     }
 
-    private void btnRefresh_Click(object sender, EventArgs e)
+    private async void btnRefresh_Click(object sender, EventArgs e)
     {
-        ReloadUsers();
+        await ReloadUsers();
     }
 
-    private void btnAdd_Click(object sender, EventArgs e)
+    private async void btnAdd_Click(object sender, EventArgs e)
     {
 
         using var dlg = new UserAddForm();
@@ -45,8 +51,8 @@ public partial class UserManagementForm : Form
 
         try
         {
-            AuthService.AddUser(dlg.UserNameValue, dlg.PasswordValue, dlg.RoleIdValue);
-            ReloadUsers();
+            await AuthService.AddUserAsync(dlg.UserNameValue, dlg.PasswordValue, dlg.RoleIdValue);
+            await ReloadUsers();
         }
         catch (Exception ex)
         {
@@ -54,14 +60,14 @@ public partial class UserManagementForm : Form
         }
     }
 
-    private void btnEdit_Click(object sender, EventArgs e)
+    private async void btnEdit_Click(object sender, EventArgs e)
     {
         var selected = GetSelectedUserName();
         if (selected is null)
             return;
 
-        var user = AuthService.GetUsers()
-            .FirstOrDefault(u => string.Equals(u.UserName, selected, StringComparison.OrdinalIgnoreCase));
+        var users = await AuthService.GetUsersAsync();
+        var user = users.FirstOrDefault(u => string.Equals(u.UserName, selected, StringComparison.OrdinalIgnoreCase));
         if (user == null)
             return;
 
@@ -73,9 +79,9 @@ public partial class UserManagementForm : Form
         {
             if (dlg.RoleIdValue != user.RoleId)
             {
-                AuthService.UpdateUserRole(user.UserName, dlg.RoleIdValue);
+                await AuthService.UpdateUserRoleAsync(user.UserName, dlg.RoleIdValue);
             }
-            ReloadUsers();
+            await ReloadUsers();
         }
         catch (Exception ex)
         {
@@ -83,7 +89,7 @@ public partial class UserManagementForm : Form
         }
     }
 
-    private void btnResetPassword_Click(object sender, EventArgs e)
+    private async void btnResetPassword_Click(object sender, EventArgs e)
     {
 
         var selected = GetSelectedUserName();
@@ -96,9 +102,9 @@ public partial class UserManagementForm : Form
 
         try
         {
-            AuthService.ResetPassword(selected, dlg.NewPassword);
+            await AuthService.ResetPasswordAsync(selected, dlg.NewPassword);
             MessageBox.Show(this, "Password updated.", "Users", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            ReloadUsers();
+            await ReloadUsers();
         }
         catch (Exception ex)
         {
@@ -106,7 +112,7 @@ public partial class UserManagementForm : Form
         }
     }
 
-    private void btnDelete_Click(object sender, EventArgs e)
+    private async void btnDelete_Click(object sender, EventArgs e)
     {
 
         var selected = GetSelectedUserName();
@@ -118,8 +124,8 @@ public partial class UserManagementForm : Form
 
         try
         {
-            AuthService.DeleteUser(selected);
-            ReloadUsers();
+            await AuthService.DeleteUserAsync(selected);
+            await ReloadUsers();
         }
         catch (Exception ex)
         {
