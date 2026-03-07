@@ -191,7 +191,7 @@ namespace PGen
             {
                 case "colCopy":
                     var copyLines = gr.Sets.OrderBy(s => s.SetIndex)
-                        .Select(s => $"Set{s.SetIndex}: MSN={s.Msn}\r\nAK32={s.Ak32}\r\nEK32={s.Ek32}");
+                        .Select(s => $"Set{s.SetIndex}: MSN={s.Msn}\r\nAK8={s.Ak8}\r\nEK8={s.Ek8}\r\nAK32={s.Ak32}\r\nEK32={s.Ek32}");
                     Clipboard.SetText(string.Join("\r\n\r\n", copyLines));
                     toolStatus.Text = $"Copied {gr.Sets.Count} set(s) to clipboard.";
                     break;
