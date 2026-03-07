@@ -92,5 +92,11 @@ public partial class LicenseAdminForm : Form
     {
         Close();
     }
+
+    private void btnLogout_Click(object sender, EventArgs e)
+    {
+        DialogResult = DialogResult.Retry;
+        Close();
+    }
 }
 

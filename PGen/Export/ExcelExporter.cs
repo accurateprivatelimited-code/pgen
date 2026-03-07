@@ -10,23 +10,56 @@ internal static class ExcelExporter
         using var wb = new XLWorkbook();
         var ws = wb.Worksheets.Add("Keys8");
 
-        ws.Cell(1, 1).Value = "MSN";
-        ws.Cell(1, 1).Style.NumberFormat.SetFormat("@");
-        ws.Cell(1, 2).Value = "AK8";
-        ws.Cell(1, 2).Style.NumberFormat.SetFormat("@");
-        ws.Cell(1, 3).Value = "EK8";
-        ws.Cell(1, 3).Style.NumberFormat.SetFormat("@");
+        // Group rows by (Msn, MeterType, Model) like the GridView
+        var grouped = rows
+            .GroupBy(r => (Msn: r.Msn, MeterType: r.MeterType, Model: r.Model ?? string.Empty))
+            .ToList();
 
-        for (var i = 0; i < rows.Count; i++)
+        // Find max set index for column generation
+        var maxSet = 0;
+        if (grouped.Count > 0)
         {
-            var r = rows[i];
-            var row = i + 2;
-            ws.Cell(row, 1).Value = r.Msn;
-            ws.Cell(row, 1).Style.NumberFormat.SetFormat("@");
-            ws.Cell(row, 2).Value = r.Ak8;
-            ws.Cell(row, 2).Style.NumberFormat.SetFormat("@");
-            ws.Cell(row, 3).Value = r.Ek8;
-            ws.Cell(row, 3).Style.NumberFormat.SetFormat("@");
+            maxSet = grouped.SelectMany(g => g).Select(s => s.SetIndex).DefaultIfEmpty(0).Max();
+        }
+
+        // Create headers matching GridView format
+        var col = 1;
+        ws.Cell(1, col++).Value = "MSN";
+        ws.Cell(1, col++).Value = "Type";
+        for (var i = 1; i <= maxSet; i++)
+        {
+            ws.Cell(1, col++).Value = $"AK8({i})";
+            ws.Cell(1, col++).Value = $"EK8({i})";
+        }
+
+        // Apply text format to header row
+        ws.Row(1).Style.NumberFormat.SetFormat("@");
+
+        var row = 2;
+        foreach (var group in grouped)
+        {
+            col = 1;
+            ws.Cell(row, col++).Value = group.Key.Msn;
+            ws.Cell(row, col++).Value = group.Key.MeterType;
+
+            var setByIndex = group.ToDictionary(r => r.SetIndex);
+            for (var i = 1; i <= maxSet; i++)
+            {
+                if (setByIndex.TryGetValue(i, out var r))
+                {
+                    ws.Cell(row, col++).Value = r.Ak8;
+                    ws.Cell(row, col++).Value = r.Ek8;
+                }
+                else
+                {
+                    ws.Cell(row, col++).Value = "";
+                    ws.Cell(row, col++).Value = "";
+                }
+            }
+
+            // Apply text format to the entire row
+            ws.Row(row).Style.NumberFormat.SetFormat("@");
+            row++;
         }
 
         ws.RangeUsed()?.SetAutoFilter();
@@ -39,23 +72,56 @@ internal static class ExcelExporter
         using var wb = new XLWorkbook();
         var ws = wb.Worksheets.Add("Keys32");
 
-        ws.Cell(1, 1).Value = "MSN";
-        ws.Cell(1, 1).Style.NumberFormat.SetFormat("@");
-        ws.Cell(1, 2).Value = "AK32";
-        ws.Cell(1, 2).Style.NumberFormat.SetFormat("@");
-        ws.Cell(1, 3).Value = "EK32";
-        ws.Cell(1, 3).Style.NumberFormat.SetFormat("@");
+        // Group rows by (Msn, MeterType, Model) like the GridView
+        var grouped = rows
+            .GroupBy(r => (Msn: r.Msn, MeterType: r.MeterType, Model: r.Model ?? string.Empty))
+            .ToList();
 
-        for (var i = 0; i < rows.Count; i++)
+        // Find max set index for column generation
+        var maxSet = 0;
+        if (grouped.Count > 0)
         {
-            var r = rows[i];
-            var row = i + 2;
-            ws.Cell(row, 1).Value = r.Msn;
-            ws.Cell(row, 1).Style.NumberFormat.SetFormat("@");
-            ws.Cell(row, 2).Value = r.Ak32;
-            ws.Cell(row, 2).Style.NumberFormat.SetFormat("@");
-            ws.Cell(row, 3).Value = r.Ek32;
-            ws.Cell(row, 3).Style.NumberFormat.SetFormat("@");
+            maxSet = grouped.SelectMany(g => g).Select(s => s.SetIndex).DefaultIfEmpty(0).Max();
+        }
+
+        // Create headers matching GridView format
+        var col = 1;
+        ws.Cell(1, col++).Value = "MSN";
+        ws.Cell(1, col++).Value = "Type";
+        for (var i = 1; i <= maxSet; i++)
+        {
+            ws.Cell(1, col++).Value = $"AK32({i})";
+            ws.Cell(1, col++).Value = $"EK32({i})";
+        }
+
+        // Apply text format to header row
+        ws.Row(1).Style.NumberFormat.SetFormat("@");
+
+        var row = 2;
+        foreach (var group in grouped)
+        {
+            col = 1;
+            ws.Cell(row, col++).Value = group.Key.Msn;
+            ws.Cell(row, col++).Value = group.Key.MeterType;
+
+            var setByIndex = group.ToDictionary(r => r.SetIndex);
+            for (var i = 1; i <= maxSet; i++)
+            {
+                if (setByIndex.TryGetValue(i, out var r))
+                {
+                    ws.Cell(row, col++).Value = r.Ak32;
+                    ws.Cell(row, col++).Value = r.Ek32;
+                }
+                else
+                {
+                    ws.Cell(row, col++).Value = "";
+                    ws.Cell(row, col++).Value = "";
+                }
+            }
+
+            // Apply text format to the entire row
+            ws.Row(row).Style.NumberFormat.SetFormat("@");
+            row++;
         }
 
         ws.RangeUsed()?.SetAutoFilter();

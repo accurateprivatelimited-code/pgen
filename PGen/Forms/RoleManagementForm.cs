@@ -230,4 +230,10 @@ public partial class RoleManagementForm : Form
             MessageBox.Show(this, $"Error: {ex.Message}", "Delete", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
+
+    private void btnLogout_Click(object sender, EventArgs e)
+    {
+        DialogResult = DialogResult.Retry;
+        Close();
+    }
 }

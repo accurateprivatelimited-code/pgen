@@ -25,6 +25,7 @@ namespace PGen
             cboRole = new System.Windows.Forms.ComboBox();
             btnOk = new System.Windows.Forms.Button();
             btnCancel = new System.Windows.Forms.Button();
+            var btnLogout = new System.Windows.Forms.Button();
             SuspendLayout();
             // 
             // lblUser
@@ -97,11 +98,23 @@ namespace PGen
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
             // 
+            // btnLogout
+            // 
+            btnLogout.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            btnLogout.Location = new System.Drawing.Point(335, 12);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new System.Drawing.Size(75, 23);
+            btnLogout.TabIndex = 8;
+            btnLogout.Text = "Logout";
+            btnLogout.UseVisualStyleBackColor = true;
+            btnLogout.Click += btnLogout_Click;
+            // 
             // UserAddForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(354, 185);
+            ClientSize = new System.Drawing.Size(420, 185);
+            Controls.Add(btnLogout);
             Controls.Add(btnCancel);
             Controls.Add(btnOk);
             Controls.Add(cboRole);
@@ -127,6 +140,6 @@ namespace PGen
         private System.Windows.Forms.ComboBox cboRole;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnLogout;
     }
 }
-

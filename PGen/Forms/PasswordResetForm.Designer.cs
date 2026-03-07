@@ -18,11 +18,12 @@ namespace PGen
         private void InitializeComponent()
         {
             var lblUser = new System.Windows.Forms.Label();
-            lblUserValue = new System.Windows.Forms.Label();
             var lblPassword = new System.Windows.Forms.Label();
+            txtUser = new System.Windows.Forms.TextBox();
             txtPassword = new System.Windows.Forms.TextBox();
             btnOk = new System.Windows.Forms.Button();
             btnCancel = new System.Windows.Forms.Button();
+            btnLogout = new System.Windows.Forms.Button();
             SuspendLayout();
             // 
             // lblUser
@@ -34,13 +35,12 @@ namespace PGen
             lblUser.TabIndex = 0;
             lblUser.Text = "User:";
             // 
-            // lblUserValue
+            // txtUser
             // 
-            lblUserValue.AutoSize = true;
-            lblUserValue.Location = new System.Drawing.Point(70, 20);
-            lblUserValue.Name = "lblUserValue";
-            lblUserValue.Size = new System.Drawing.Size(0, 15);
-            lblUserValue.TabIndex = 1;
+            txtUser.Location = new System.Drawing.Point(70, 17);
+            txtUser.Name = "txtUser";
+            txtUser.Size = new System.Drawing.Size(220, 23);
+            txtUser.TabIndex = 1;
             // 
             // lblPassword
             // 
@@ -79,16 +79,28 @@ namespace PGen
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
             // 
+            // btnLogout
+            // 
+            btnLogout.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            btnLogout.Location = new System.Drawing.Point(265, 12);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new System.Drawing.Size(75, 23);
+            btnLogout.TabIndex = 6;
+            btnLogout.Text = "Logout";
+            btnLogout.UseVisualStyleBackColor = true;
+            btnLogout.Click += btnLogout_Click;
+            // 
             // PasswordResetForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(364, 140);
+            ClientSize = new System.Drawing.Size(350, 121);
+            Controls.Add(btnLogout);
             Controls.Add(btnCancel);
             Controls.Add(btnOk);
             Controls.Add(txtPassword);
+            Controls.Add(txtUser);
             Controls.Add(lblPassword);
-            Controls.Add(lblUserValue);
             Controls.Add(lblUser);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -102,10 +114,13 @@ namespace PGen
 
         #endregion
 
-        private System.Windows.Forms.Label lblUserValue;
+        private System.Windows.Forms.Label lblUser;
+        private System.Windows.Forms.TextBox txtUser;
+        private System.Windows.Forms.Label lblPassword;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnLogout;
     }
 }
 

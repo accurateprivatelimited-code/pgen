@@ -218,7 +218,7 @@ namespace PGen
 
         private void Export(bool is32)
         {
-            if (_rows.Count == 0)
+            if (_groupedRowsForActions.Count == 0)
             {
                 MessageBox.Show(this, "No rows to export. Generate first.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -237,12 +237,13 @@ namespace PGen
             try
             {
                 toolStatus.Text = "Exporting…";
-                var snapshot = _rows.ToList();
+                // Export only the filtered data currently displayed in the GridView
+                var visibleRows = _groupedRowsForActions.SelectMany(g => g.Sets).ToList();
                 if (is32)
-                    ExcelExporter.Export32Digit(sfd.FileName, snapshot);
+                    ExcelExporter.Export32Digit(sfd.FileName, visibleRows);
                 else
-                    ExcelExporter.Export8Digit(sfd.FileName, snapshot);
-                toolStatus.Text = $"Exported: {Path.GetFileName(sfd.FileName)}";
+                    ExcelExporter.Export8Digit(sfd.FileName, visibleRows);
+                toolStatus.Text = $"Exported: {Path.GetFileName(sfd.FileName)} ({visibleRows.Count} rows)";
             }
             catch (Exception ex)
             {
@@ -292,14 +293,17 @@ namespace PGen
             // license has highest priority, then users, then roles
             if (menuCreateLicense.Enabled)
             {
+                _shownDialogs.Add(InitialDialog.Licenses);
                 menuCreateLicense.PerformClick();
             }
             else if (menuManageUsers.Enabled)
             {
+                _shownDialogs.Add(InitialDialog.Users);
                 menuManageUsers.PerformClick();
             }
             else if (menuManageRoles.Enabled)
             {
+                _shownDialogs.Add(InitialDialog.Roles);
                 menuManageRoles.PerformClick();
             }
         }
@@ -334,23 +338,28 @@ namespace PGen
 
         private enum InitialDialog { None, Users, Roles, Licenses }
 
+        private readonly HashSet<InitialDialog> _shownDialogs = new();
+
         private void PostDialogCleanup(InitialDialog closed)
         {
             // if user cannot generate passwords, we should not return to generator
             if (!AuthService.HasRight(_currentUser, UserRight.GeneratePasswords))
             {
-                // choose next enabled dialog that isn't the one just closed
-                if (menuCreateLicense.Enabled && closed != InitialDialog.Licenses)
+                // Mark the closed dialog as shown
+                _shownDialogs.Add(closed);
+                
+                // choose next enabled dialog that hasn't been shown yet
+                if (menuCreateLicense.Enabled && !_shownDialogs.Contains(InitialDialog.Licenses))
                 {
                     menuCreateLicense.PerformClick();
                     return;
                 }
-                if (menuManageUsers.Enabled && closed != InitialDialog.Users)
+                if (menuManageUsers.Enabled && !_shownDialogs.Contains(InitialDialog.Users))
                 {
                     menuManageUsers.PerformClick();
                     return;
                 }
-                if (menuManageRoles.Enabled && closed != InitialDialog.Roles)
+                if (menuManageRoles.Enabled && !_shownDialogs.Contains(InitialDialog.Roles))
                 {
                     menuManageRoles.PerformClick();
                     return;
@@ -364,6 +373,8 @@ namespace PGen
                     BeginInvoke((Action)Close);
                 }
             }
+            // If user has GeneratePasswords rights, allow normal operation
+            // Don't automatically open any more dialogs
         }
 
         private void EditGroupRow(MeterKeyGroupRow gr)

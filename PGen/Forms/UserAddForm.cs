@@ -72,4 +72,10 @@ public partial class UserAddForm : Form
         DialogResult = DialogResult.Cancel;
         Close();
     }
+
+    private void btnLogout_Click(object sender, EventArgs e)
+    {
+        DialogResult = DialogResult.Retry;
+        Close();
+    }
 }

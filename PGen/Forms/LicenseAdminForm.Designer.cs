@@ -25,6 +25,7 @@ namespace PGen
             numDays = new System.Windows.Forms.NumericUpDown();
             btnGenerate = new System.Windows.Forms.Button();
             btnClose = new System.Windows.Forms.Button();
+            btnLogout = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)numDays).BeginInit();
             SuspendLayout();
             // 
@@ -100,11 +101,23 @@ namespace PGen
             btnClose.UseVisualStyleBackColor = true;
             btnClose.Click += btnClose_Click;
             // 
+            // btnLogout
+            // 
+            btnLogout.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            btnLogout.Location = new System.Drawing.Point(469, 12);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new System.Drawing.Size(75, 23);
+            btnLogout.TabIndex = 6;
+            btnLogout.Text = "Logout";
+            btnLogout.UseVisualStyleBackColor = true;
+            btnLogout.Click += btnLogout_Click;
+            // 
             // LicenseAdminForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(544, 143);
+            Controls.Add(btnLogout);
             Controls.Add(btnClose);
             Controls.Add(btnGenerate);
             Controls.Add(numDays);
@@ -131,6 +144,7 @@ namespace PGen
         private System.Windows.Forms.NumericUpDown numDays;
         private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Button btnLogout;
     }
 }
 

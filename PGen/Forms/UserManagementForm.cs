@@ -142,4 +142,10 @@ public partial class UserManagementForm : Form
         dynamic item = row.DataBoundItem;
         return item.UserName;
     }
+
+    private void btnLogout_Click(object sender, EventArgs e)
+    {
+        DialogResult = DialogResult.Retry;
+        Close();
+    }
 }

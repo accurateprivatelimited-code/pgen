@@ -61,12 +61,14 @@ namespace PGen
 
             btnOK = new Button { Text = "OK", Location = new Point(260, 360), Size = new Size(75, 23), DialogResult = DialogResult.OK };
             btnCancel = new Button { Text = "Cancel", Location = new Point(345, 360), Size = new Size(75, 23), DialogResult = DialogResult.Cancel };
+            btnLogout = new Button { Text = "Logout", Location = new Point(370, 12), Size = new Size(75, 23) };
+            btnLogout.Click += BtnLogout_Click;
 
             // Add controls to form
             this.Controls.AddRange(new Control[] {
                 lblMsn, txtMsn, lblType, txtMeterType,
                 lblSet, numSetIndex, lblAk8, txtAk8, lblEk8, txtEk8,
-                lblAk32, txtAk32, lblEk32, txtEk32, btnOK, btnCancel
+                lblAk32, txtAk32, lblEk32, txtEk32, btnOK, btnCancel, btnLogout
             });
 
             btnOK.Click += BtnOK_Click;
@@ -209,6 +211,7 @@ namespace PGen
         private TextBox txtEk32;
         private Button btnOK;
         private Button btnCancel;
+        private Button btnLogout;
 
         // utility helpers for numeric-only key fields
         private static bool IsPositiveInteger(string text)
@@ -258,6 +261,12 @@ namespace PGen
             // only digits and control characters (backspace, etc.) are permitted
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
                 e.Handled = true;
+        }
+
+        private void BtnLogout_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Retry;
+            Close();
         }
     }
 }

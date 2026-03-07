@@ -11,7 +11,8 @@ public partial class PasswordResetForm : Form
     public PasswordResetForm(string username)
     {
         InitializeComponent();
-        lblUserValue.Text = username;
+        txtUser.Text = username;
+        txtUser.ReadOnly = true;
     }
 
     private void btnOk_Click(object sender, EventArgs e)
@@ -28,6 +29,12 @@ public partial class PasswordResetForm : Form
     private void btnCancel_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.Cancel;
+        Close();
+    }
+
+    private void btnLogout_Click(object sender, EventArgs e)
+    {
+        DialogResult = DialogResult.Retry;
         Close();
     }
 }

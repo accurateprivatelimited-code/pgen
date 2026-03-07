@@ -25,6 +25,7 @@ namespace PGen
             btnDelete = new Button();
             btnRefresh = new Button();
             btnEdit = new Button();
+            btnLogout = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvUsers).BeginInit();
             SuspendLayout();
             // 
@@ -124,11 +125,23 @@ namespace PGen
             btnEdit.UseVisualStyleBackColor = true;
             btnEdit.Click += btnEdit_Click;
             // 
+            // btnLogout
+            // 
+            btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLogout.Location = new Point(478, 12);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(75, 23);
+            btnLogout.TabIndex = 5;
+            btnLogout.Text = "Logout";
+            btnLogout.UseVisualStyleBackColor = true;
+            btnLogout.Click += btnLogout_Click;
+            // 
             // UserManagementForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(553, 432);
+            Controls.Add(btnLogout);
             Controls.Add(btnRefresh);
             Controls.Add(btnDelete);
             Controls.Add(btnEdit);
@@ -154,6 +167,7 @@ namespace PGen
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.Button btnLogout;
         private DataGridViewTextBoxColumn colUser;
         private DataGridViewTextBoxColumn colRole;
     }

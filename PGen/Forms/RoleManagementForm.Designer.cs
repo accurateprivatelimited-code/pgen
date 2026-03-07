@@ -43,6 +43,7 @@ partial class RoleManagementForm
         btnUpdateRole = new Button();
         btnDeleteRole = new Button();
         btnNewRole = new Button();
+        btnLogout = new Button();
         pnlNewRole = new Panel();
         lblNewRoleStatus = new Label();
         btnCancelNewRole = new Button();
@@ -395,10 +396,21 @@ partial class RoleManagementForm
         btnNewRole.Click += btnNewRole_Click;
         pnlRoleDetails.Controls.Add(btnNewRole);
         
+        // btnLogout
+        btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        btnLogout.Location = new Point(725, 12);
+        btnLogout.Name = "btnLogout";
+        btnLogout.Size = new Size(75, 23);
+        btnLogout.TabIndex = 8;
+        btnLogout.Text = "Logout";
+        btnLogout.UseVisualStyleBackColor = true;
+        btnLogout.Click += btnLogout_Click;
+        
         // RoleManagementForm
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(800, 605);
+        Controls.Add(btnLogout);
         Controls.Add(pnlNewRole);
         Controls.Add(pnlRoleDetails);
         Controls.Add(lstRoles);
@@ -449,6 +461,7 @@ partial class RoleManagementForm
     private Button btnUpdateRole;
     private Button btnDeleteRole;
     private Button btnNewRole;
+    private Button btnLogout;
     private Panel pnlNewRole;
     private Label lblNewRoleStatus;
     private Button btnCancelNewRole;
