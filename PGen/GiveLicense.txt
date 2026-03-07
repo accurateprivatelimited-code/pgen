@@ -1,0 +1,11 @@
+cd d:\PasswordGenerator\PGen
+
+# create a license file (it will be written to the application's base directory,
+# e.g. the bin\Debug\net8.0-windows folder when running from Visual Studio).
+# you can also explicitly choose the destination using --out.
+
+dotnet run --project .\\PGen\\PGen.csproj -- --make-license 8D7FB75350E00A393ACC103B4575328188A16E28F0B340E74222369AE864F325 --days 365
+
+# --- alternate example with explicit output path ----------------------------
+# dotnet run --project .\\PGen\\PGen.csproj -- -m  ID1,ID2 --days 365 \
+#     --out d:\\PasswordGenerator\\PGen\\PGen\\bin\\Debug\\net8.0-windows\\license.bin
