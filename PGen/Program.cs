@@ -10,13 +10,13 @@ namespace PGen
     {
         [STAThread]
         [SupportedOSPlatform("windows")]
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             // initial user setup (creates admin account if needed)
-            await AuthService.EnsureDefaultUsersAsync();
+            AuthService.EnsureDefaultUsersAsync().GetAwaiter().GetResult();
 
             while (true)
             {

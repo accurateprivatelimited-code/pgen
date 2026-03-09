@@ -49,7 +49,7 @@ public partial class LicenseAdminForm : Form
 
     private void btnGenerate_Click(object sender, EventArgs e)
     {
-        var machineId = txtMachineId.Text.Trim();
+        var machineId = txtMachineId.Text.Trim();   
         if (machineId.Length == 0)
         {
             MessageBox.Show(this, "Machine ID is required.", "License", MessageBoxButtons.OK, MessageBoxIcon.Warning);
