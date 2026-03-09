@@ -646,15 +646,15 @@ namespace PGen
                 UseColumnTextForButtonValue = true,
                 Width = 55
             });
-            dgvResults.Columns.Add(new DataGridViewButtonColumn
-            {
-                HeaderText = "Edit",
-                Name = "colEdit",
-                ReadOnly = true,
-                Text = "Edit",
-                UseColumnTextForButtonValue = true,
-                Width = 55
-            });
+            //dgvResults.Columns.Add(new DataGridViewButtonColumn
+            //{
+            //    HeaderText = "Edit",
+            //    Name = "colEdit",
+            //    ReadOnly = true,
+            //    Text = "Edit",
+            //    UseColumnTextForButtonValue = true,
+            //    Width = 55
+            //});
             dgvResults.Columns.Add(new DataGridViewButtonColumn
             {
                 HeaderText = "Delete",
