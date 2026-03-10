@@ -26,7 +26,13 @@ namespace PGen
             btnRefresh = new Button();
             btnEdit = new Button();
             btnLogout = new Button();
+            menuStrip = new MenuStrip();
+            menuAdmin = new ToolStripMenuItem();
+            menuCreateLicense = new ToolStripMenuItem();
+            menuManageUsers = new ToolStripMenuItem();
+            menuManageRoles = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dgvUsers).BeginInit();
+            menuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // dgvUsers
@@ -36,7 +42,7 @@ namespace PGen
             dgvUsers.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvUsers.Columns.AddRange(new DataGridViewColumn[] { colUser, colRole });
-            dgvUsers.Location = new Point(14, 42);
+            dgvUsers.Location = new Point(14, 73);
             dgvUsers.Margin = new Padding(3, 4, 3, 4);
             dgvUsers.MultiSelect = false;
             dgvUsers.Name = "dgvUsers";
@@ -44,7 +50,7 @@ namespace PGen
             dgvUsers.RowHeadersVisible = false;
             dgvUsers.RowHeadersWidth = 51;
             dgvUsers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvUsers.Size = new Size(526, 321);
+            dgvUsers.Size = new Size(526, 290);
             dgvUsers.TabIndex = 0;
             // 
             // colUser
@@ -92,7 +98,7 @@ namespace PGen
             // btnDelete
             // 
             btnDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnDelete.Location = new Point(12, 6);
+            btnDelete.Location = new Point(217, 33);
             btnDelete.Margin = new Padding(3, 4, 3, 4);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(103, 36);
@@ -128,7 +134,7 @@ namespace PGen
             // btnLogout
             // 
             btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnLogout.Location = new Point(465, 12);
+            btnLogout.Location = new Point(465, 36);
             btnLogout.Name = "btnLogout";
             btnLogout.Size = new Size(75, 30);
             btnLogout.TabIndex = 5;
@@ -136,11 +142,50 @@ namespace PGen
             btnLogout.UseVisualStyleBackColor = true;
             btnLogout.Click += btnLogout_Click;
             // 
+            // menuStrip
+            // 
+            menuStrip.ImageScalingSize = new Size(20, 20);
+            menuStrip.Items.AddRange(new ToolStripItem[] { menuAdmin });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Size = new Size(553, 28);
+            menuStrip.TabIndex = 6;
+            menuStrip.Text = "menuStrip1";
+            // 
+            // menuAdmin
+            // 
+            menuAdmin.DropDownItems.AddRange(new ToolStripItem[] { menuCreateLicense, menuManageUsers, menuManageRoles });
+            menuAdmin.Name = "menuAdmin";
+            menuAdmin.Size = new Size(67, 24);
+            menuAdmin.Text = "Admin";
+            // 
+            // menuCreateLicense
+            // 
+            menuCreateLicense.Name = "menuCreateLicense";
+            menuCreateLicense.Size = new Size(247, 26);
+            menuCreateLicense.Text = "Create Machine License";
+            menuCreateLicense.Click += menuCreateLicense_Click;
+            // 
+            // menuManageUsers
+            // 
+            menuManageUsers.Name = "menuManageUsers";
+            menuManageUsers.Size = new Size(247, 26);
+            menuManageUsers.Text = "Manage Users";
+            menuManageUsers.Click += menuManageUsers_Click;
+            // 
+            // menuManageRoles
+            // 
+            menuManageRoles.Name = "menuManageRoles";
+            menuManageRoles.Size = new Size(247, 26);
+            menuManageRoles.Text = "Manage Roles";
+            menuManageRoles.Click += menuManageRoles_Click;
+            // 
             // UserManagementForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(553, 432);
+            Controls.Add(menuStrip);
             Controls.Add(btnLogout);
             Controls.Add(btnRefresh);
             Controls.Add(btnDelete);
@@ -149,6 +194,7 @@ namespace PGen
             Controls.Add(btnAdd);
             Controls.Add(dgvUsers);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            MainMenuStrip = menuStrip;
             Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
             MinimizeBox = false;
@@ -156,7 +202,10 @@ namespace PGen
             StartPosition = FormStartPosition.CenterParent;
             Text = "Admin - Manage Users";
             ((System.ComponentModel.ISupportInitialize)dgvUsers).EndInit();
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -168,6 +217,11 @@ namespace PGen
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.MenuStrip menuStrip;
+        private System.Windows.Forms.ToolStripMenuItem menuAdmin;
+        private System.Windows.Forms.ToolStripMenuItem menuCreateLicense;
+        private System.Windows.Forms.ToolStripMenuItem menuManageUsers;
+        private System.Windows.Forms.ToolStripMenuItem menuManageRoles;
         private DataGridViewTextBoxColumn colUser;
         private DataGridViewTextBoxColumn colRole;
     }

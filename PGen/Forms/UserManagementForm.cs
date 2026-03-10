@@ -14,6 +14,44 @@ public partial class UserManagementForm : Form
     {
         _currentUser = currentUser;
         InitializeComponent();
+
+        // configure admin menu availability
+        menuCreateLicense.Enabled = AuthService.HasRight(_currentUser, UserRight.ManageLicenses);
+        menuManageUsers.Enabled = false; // already on user management
+        menuManageRoles.Enabled = AuthService.HasRight(_currentUser, UserRight.EditRoles);
+    }
+
+    private void menuCreateLicense_Click(object sender, EventArgs e)
+    {
+        if (!menuCreateLicense.Enabled)
+            return;
+
+        using var dlg = new LicenseAdminForm(_currentUser);
+        var result = dlg.ShowDialog(this);
+        if (result == DialogResult.Retry)
+        {
+            DialogResult = DialogResult.Retry;
+            Close();
+        }
+    }
+
+    private void menuManageUsers_Click(object sender, EventArgs e)
+    {
+        // already on user management; nothing to do
+    }
+
+    private void menuManageRoles_Click(object sender, EventArgs e)
+    {
+        if (!menuManageRoles.Enabled)
+            return;
+
+        using var dlg = new RoleManagementForm(_currentUser);
+        var result = dlg.ShowDialog(this);
+        if (result == DialogResult.Retry)
+        {
+            DialogResult = DialogResult.Retry;
+            Close();
+        }
     }
 
     private async Task ReloadUsers()
@@ -46,7 +84,14 @@ public partial class UserManagementForm : Form
     {
 
         using var dlg = new UserAddForm();
-        if (dlg.ShowDialog(this) != DialogResult.OK)
+        var result = dlg.ShowDialog(this);
+        if (result == DialogResult.Retry)
+        {
+            DialogResult = DialogResult.Retry;
+            Close();
+            return;
+        }
+        if (result != DialogResult.OK)
             return;
 
         try
@@ -72,7 +117,14 @@ public partial class UserManagementForm : Form
             return;
 
         using var dlg = new UserAddForm(user);
-        if (dlg.ShowDialog(this) != DialogResult.OK)
+        var result = dlg.ShowDialog(this);
+        if (result == DialogResult.Retry)
+        {
+            DialogResult = DialogResult.Retry;
+            Close();
+            return;
+        }
+        if (result != DialogResult.OK)
             return;
 
         try
@@ -97,7 +149,14 @@ public partial class UserManagementForm : Form
             return;
 
         using var dlg = new PasswordResetForm(selected);
-        if (dlg.ShowDialog(this) != DialogResult.OK)
+        var result = dlg.ShowDialog(this);
+        if (result == DialogResult.Retry)
+        {
+            DialogResult = DialogResult.Retry;
+            Close();
+            return;
+        }
+        if (result != DialogResult.OK)
             return;
 
         try

@@ -32,6 +32,20 @@ CREATE TABLE `licenses` (
   CONSTRAINT `FK_licenses_user` FOREIGN KEY (`generated_for`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+/*Table structure for table `meter_types` */
+
+DROP TABLE IF EXISTS `meter_types`;
+
+CREATE TABLE `meter_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL COMMENT 'Display name for meter type',
+  `sort_order` int(11) NOT NULL DEFAULT 0 COMMENT 'Order in dropdown (lower first)',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_utc` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_meter_types_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 /*Table structure for table `meter_key_rows` */
 
 DROP TABLE IF EXISTS `meter_key_rows`;

@@ -1,34 +1,59 @@
+using System;
+using MySql.Data.MySqlClient;
+using PGen.Data;
+
 namespace PGen.Security;
 
 internal static class LicenseValidator
 {
-    public const string LicenseFileName = "license.bin";
-
     public static LicenseValidationResult ValidateOrExplain()
     {
-        var licensePath = Path.Combine(AppContext.BaseDirectory, LicenseFileName);
-        var license = LicenseService.TryReadLicense(licensePath);
-        if (license is null)
+        var machineId = MachineId.ComputeMachineIdHex();
+
+        try
+        {
+            using var conn = Database.CreateConnection();
+            using var cmd = new MySqlCommand(
+                "SELECT version, generated_for, machine_id, expires_utc " +
+                "FROM licenses " +
+                "WHERE machine_id = @machineId " +
+                "ORDER BY expires_utc DESC " +
+                "LIMIT 1",
+                conn);
+
+            cmd.Parameters.AddWithValue("@machineId", machineId);
+
+            using var reader = cmd.ExecuteReader();
+            if (!reader.Read())
+            {
+                return new LicenseValidationResult(
+                    IsValid: false,
+                    Message:
+                        "No license found for this machine.\r\n\r\n" +
+                        $"Machine ID:\r\n{machineId}");
+            }
+
+            int expiresIndex = reader.GetOrdinal("expires_utc");
+            if (!reader.IsDBNull(expiresIndex))
+            {
+                var expiresUtc = reader.GetDateTime(expiresIndex);
+                if (DateTime.UtcNow > expiresUtc)
+                {
+                    return new LicenseValidationResult(false, "License is expired.");
+                }
+            }
+
+            return new LicenseValidationResult(true, "OK");
+        }
+        catch (Exception ex)
         {
             return new LicenseValidationResult(
                 IsValid: false,
                 Message:
-                    "License file not found or invalid.\r\n\r\n" +
-                    $"Machine ID:\r\n{MachineId.ComputeMachineIdHex()}\r\n\r\n" +
-                    $"Place a valid '{LicenseFileName}' next to the EXE.");
+                    "Error while validating license from database.\r\n\r\n" +
+                    ex.Message + "\r\n\r\n" +
+                    $"Machine ID:\r\n{machineId}");
         }
-
-        if (license.AllowedMachineIds is null || license.AllowedMachineIds.Length == 0)
-            return new LicenseValidationResult(false, "License has no allowed machines.");
-
-        if (license.ExpiresUtc is not null && DateTime.UtcNow > license.ExpiresUtc.Value)
-            return new LicenseValidationResult(false, "License is expired.");
-
-        var machineId = MachineId.ComputeMachineIdHex();
-        if (!license.AllowedMachineIds.Contains(machineId, StringComparer.OrdinalIgnoreCase))
-            return new LicenseValidationResult(false, "This machine is not licensed.\r\n\r\nMachine ID:\r\n" + machineId);
-
-        return new LicenseValidationResult(true, "OK");
     }
 }
 

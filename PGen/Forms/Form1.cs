@@ -27,21 +27,7 @@ namespace PGen
 
             dgvResults.AutoGenerateColumns = false;
 
-            cboMeterType.Items.AddRange(new object[] {
-                "1P GPRS",
-                "3P WC GPRS UNI",
-                "3P WC GPRS BI",
-                "3P WC NO AMR UNI",
-                "3P WC NO AMR BI",
-                "LT/HT GPRS UNI",
-                "LT/HT GPRS BI",
-                "LT NON AMR",
-                "HT NON AMR",
-                "SMCD",
-                "P202",
-                "1P NON AMR"
-            });
-            cboMeterType.SelectedIndex = 0;
+            LoadMeterTypes();
 
 
 
@@ -66,6 +52,34 @@ namespace PGen
             NavigateInitialForm();
 
             ApplyFilter();
+        }
+
+        private void LoadMeterTypes()
+        {
+            try
+            {
+                var types = MeterTypeRepository.GetMeterTypes();
+                if (types.Count > 0)
+                {
+                    cboMeterType.Items.Clear();
+                    cboMeterType.Items.AddRange(types.ToArray());
+                    cboMeterType.SelectedIndex = 0;
+                    return;
+                }
+            }
+            catch
+            {
+                // Fall through to default list
+            }
+
+            // Fallback when meter_types table is empty or DB unavailable
+            var defaults = new[] {
+                "1P GPRS", "3P WC GPRS UNI", "3P WC GPRS BI", "3P WC NO AMR UNI", "3P WC NO AMR BI",
+                "LT/HT GPRS UNI", "LT/HT GPRS BI", "LT NON AMR", "HT NON AMR", "SMCD", "P202", "1P NON AMR"
+            };
+            cboMeterType.Items.Clear();
+            cboMeterType.Items.AddRange(defaults);
+            cboMeterType.SelectedIndex = 0;
         }
 
         private async void btnGenerate_Click(object sender, EventArgs e)
@@ -258,7 +272,6 @@ namespace PGen
             btnCancel.Enabled = busy;
             btnExport8.Enabled = !busy;
             btnExport32.Enabled = !busy;
-            btnCopySelected.Enabled = !busy;
             txtMsnOrRange.Enabled = !busy;
             cboMeterType.Enabled = !busy;
             numSets.Enabled = !busy;
@@ -273,7 +286,13 @@ namespace PGen
             }
 
             using var dlg = new LicenseAdminForm(_currentUser);
-            dlg.ShowDialog(this);
+            var result = dlg.ShowDialog(this);
+            if (result == DialogResult.Retry)
+            {
+                DialogResult = DialogResult.Retry;
+                Close();
+                return;
+            }
             PostDialogCleanup(InitialDialog.Licenses);
         }
 
@@ -319,7 +338,13 @@ namespace PGen
             }
 
             using var dlg = new UserManagementForm(_currentUser);
-            dlg.ShowDialog(this);
+            var result = dlg.ShowDialog(this);
+            if (result == DialogResult.Retry)
+            {
+                DialogResult = DialogResult.Retry;
+                Close();
+                return;
+            }
             PostDialogCleanup(InitialDialog.Users);
         }
 
@@ -332,7 +357,13 @@ namespace PGen
             }
 
             using var dlg = new RoleManagementForm(_currentUser);
-            dlg.ShowDialog(this);
+            var result = dlg.ShowDialog(this);
+            if (result == DialogResult.Retry)
+            {
+                DialogResult = DialogResult.Retry;
+                Close();
+                return;
+            }
             PostDialogCleanup(InitialDialog.Roles);
         }
 

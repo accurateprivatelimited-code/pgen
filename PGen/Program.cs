@@ -63,11 +63,19 @@ namespace PGen
                     return;
                 }
 
-                using var main = new Form1(user);
-                var result = main.ShowDialog();
-                if (result != DialogResult.Retry)
-                    break; // normal close
-                // Retry means logout → loop back to login
+                try
+                {
+                    using var main = new Form1(user);
+                    var result = main.ShowDialog();
+                    if (result != DialogResult.Retry)
+                        break; // normal close
+                    // Retry means logout → loop back to login
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Form disposed during logout/close flow; return to login
+                    continue;
+                }
             }
         }
     }

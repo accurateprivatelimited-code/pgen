@@ -51,12 +51,18 @@ partial class RoleManagementForm
         lblNewRoleDesc = new Label();
         txtNewRoleName = new TextBox();
         lblNewRoleName = new Label();
+        menuStrip = new MenuStrip();
+        menuAdmin = new ToolStripMenuItem();
+        menuCreateLicense = new ToolStripMenuItem();
+        menuManageUsers = new ToolStripMenuItem();
+        menuManageRoles = new ToolStripMenuItem();
         pnlRoleDetails.SuspendLayout();
         grpRights.SuspendLayout();
         grpFormRights.SuspendLayout();
         grpRoleRights.SuspendLayout();
         grpUserRights.SuspendLayout();
         pnlNewRole.SuspendLayout();
+        menuStrip.SuspendLayout();
         SuspendLayout();
         // 
         // lstRoles
@@ -95,12 +101,13 @@ partial class RoleManagementForm
         grpRights.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         grpRights.Controls.Add(grpFormRights);
         grpRights.Controls.Add(grpRoleRights);
+        grpRights.Controls.Add(pnlNewRole);
         grpRights.Controls.Add(grpUserRights);
-        grpRights.Location = new Point(15, 160);
+        grpRights.Location = new Point(15, 194);
         grpRights.Margin = new Padding(3, 4, 3, 4);
         grpRights.Name = "grpRights";
         grpRights.Padding = new Padding(6, 7, 6, 7);
-        grpRights.Size = new Size(656, 533);
+        grpRights.Size = new Size(656, 499);
         grpRights.TabIndex = 7;
         grpRights.TabStop = false;
         grpRights.Text = "Assign Rights";
@@ -295,7 +302,7 @@ partial class RoleManagementForm
         // lblDescription
         // 
         lblDescription.AutoSize = true;
-        lblDescription.Location = new Point(15, 100);
+        lblDescription.Location = new Point(15, 146);
         lblDescription.Name = "lblDescription";
         lblDescription.Size = new Size(88, 20);
         lblDescription.TabIndex = 4;
@@ -303,17 +310,17 @@ partial class RoleManagementForm
         // 
         // txtDescription
         // 
-        txtDescription.Location = new Point(109, 96);
+        txtDescription.Location = new Point(109, 142);
         txtDescription.Margin = new Padding(3, 4, 3, 4);
         txtDescription.Multiline = true;
         txtDescription.Name = "txtDescription";
-        txtDescription.Size = new Size(486, 55);
+        txtDescription.Size = new Size(486, 44);
         txtDescription.TabIndex = 5;
         // 
         // lblRoleName
         // 
         lblRoleName.AutoSize = true;
-        lblRoleName.Location = new Point(15, 60);
+        lblRoleName.Location = new Point(15, 106);
         lblRoleName.Name = "lblRoleName";
         lblRoleName.Size = new Size(86, 20);
         lblRoleName.TabIndex = 2;
@@ -321,7 +328,7 @@ partial class RoleManagementForm
         // 
         // txtRoleName
         // 
-        txtRoleName.Location = new Point(109, 56);
+        txtRoleName.Location = new Point(109, 102);
         txtRoleName.Margin = new Padding(3, 4, 3, 4);
         txtRoleName.Name = "txtRoleName";
         txtRoleName.Size = new Size(486, 27);
@@ -330,7 +337,7 @@ partial class RoleManagementForm
         // lblRoleId
         // 
         lblRoleId.AutoSize = true;
-        lblRoleId.Location = new Point(15, 20);
+        lblRoleId.Location = new Point(15, 66);
         lblRoleId.Name = "lblRoleId";
         lblRoleId.Size = new Size(61, 20);
         lblRoleId.TabIndex = 0;
@@ -339,7 +346,7 @@ partial class RoleManagementForm
         // txtRoleId
         // 
         txtRoleId.Enabled = false;
-        txtRoleId.Location = new Point(109, 16);
+        txtRoleId.Location = new Point(109, 62);
         txtRoleId.Margin = new Padding(3, 4, 3, 4);
         txtRoleId.Name = "txtRoleId";
         txtRoleId.Size = new Size(486, 27);
@@ -383,7 +390,7 @@ partial class RoleManagementForm
         // btnLogout
         // 
         btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        btnLogout.Location = new Point(829, 16);
+        btnLogout.Location = new Point(829, 32);
         btnLogout.Margin = new Padding(3, 4, 3, 4);
         btnLogout.Name = "btnLogout";
         btnLogout.Size = new Size(86, 31);
@@ -403,7 +410,7 @@ partial class RoleManagementForm
         pnlNewRole.Controls.Add(lblNewRoleDesc);
         pnlNewRole.Controls.Add(txtNewRoleName);
         pnlNewRole.Controls.Add(lblNewRoleName);
-        pnlNewRole.Location = new Point(286, 333);
+        pnlNewRole.Location = new Point(107, 201);
         pnlNewRole.Margin = new Padding(3, 4, 3, 4);
         pnlNewRole.Name = "pnlNewRole";
         pnlNewRole.Padding = new Padding(11, 13, 11, 13);
@@ -476,13 +483,51 @@ partial class RoleManagementForm
         lblNewRoleName.TabIndex = 0;
         lblNewRoleName.Text = "Role Name:";
         // 
+        // menuStrip
+        // 
+        menuStrip.ImageScalingSize = new Size(20, 20);
+        menuStrip.Items.AddRange(new ToolStripItem[] { menuAdmin });
+        menuStrip.Location = new Point(228, 0);
+        menuStrip.Name = "menuStrip";
+        menuStrip.Size = new Size(686, 28);
+        menuStrip.TabIndex = 11;
+        menuStrip.Text = "menuStrip1";
+        // 
+        // menuAdmin
+        // 
+        menuAdmin.DropDownItems.AddRange(new ToolStripItem[] { menuCreateLicense, menuManageUsers, menuManageRoles });
+        menuAdmin.Name = "menuAdmin";
+        menuAdmin.Size = new Size(67, 24);
+        menuAdmin.Text = "Admin";
+        // 
+        // menuCreateLicense
+        // 
+        menuCreateLicense.Name = "menuCreateLicense";
+        menuCreateLicense.Size = new Size(247, 26);
+        menuCreateLicense.Text = "Create Machine License";
+        menuCreateLicense.Click += menuCreateLicense_Click;
+        // 
+        // menuManageUsers
+        // 
+        menuManageUsers.Name = "menuManageUsers";
+        menuManageUsers.Size = new Size(247, 26);
+        menuManageUsers.Text = "Manage Users";
+        menuManageUsers.Click += menuManageUsers_Click;
+        // 
+        // menuManageRoles
+        // 
+        menuManageRoles.Name = "menuManageRoles";
+        menuManageRoles.Size = new Size(247, 26);
+        menuManageRoles.Text = "Manage Roles";
+        menuManageRoles.Click += menuManageRoles_Click;
+        // 
         // RoleManagementForm
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(914, 807);
+        Controls.Add(menuStrip);
         Controls.Add(btnLogout);
-        Controls.Add(pnlNewRole);
         Controls.Add(pnlRoleDetails);
         Controls.Add(lstRoles);
         Margin = new Padding(3, 4, 3, 4);
@@ -501,7 +546,10 @@ partial class RoleManagementForm
         grpUserRights.PerformLayout();
         pnlNewRole.ResumeLayout(false);
         pnlNewRole.PerformLayout();
+        menuStrip.ResumeLayout(false);
+        menuStrip.PerformLayout();
         ResumeLayout(false);
+        PerformLayout();
     }
 
     private ListBox lstRoles;
@@ -541,4 +589,9 @@ partial class RoleManagementForm
     private Label lblNewRoleDesc;
     private TextBox txtNewRoleName;
     private Label lblNewRoleName;
+    private MenuStrip menuStrip;
+    private ToolStripMenuItem menuAdmin;
+    private ToolStripMenuItem menuCreateLicense;
+    private ToolStripMenuItem menuManageUsers;
+    private ToolStripMenuItem menuManageRoles;
 }

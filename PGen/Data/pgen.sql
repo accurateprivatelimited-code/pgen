@@ -37,6 +37,36 @@ CREATE TABLE `licenses` (
 insert  into `licenses`(`id`,`version`,`generated_for`,`machine_id`,`expires_utc`,`created_utc`) values 
 (1,'1','admin','10354E263D8C6CC84039B49E495ECF5A6AF2CDFA62A05C2149DA0CCD4C0844E8','2027-03-07 07:11:49','2026-03-07 12:11:50');
 
+/*Table structure for table `meter_types` */
+
+DROP TABLE IF EXISTS `meter_types`;
+
+CREATE TABLE `meter_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL COMMENT 'Display name for meter type',
+  `sort_order` int(11) NOT NULL DEFAULT 0 COMMENT 'Order in dropdown (lower first)',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_utc` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_meter_types_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `meter_types` */
+
+insert  into `meter_types`(`id`,`name`,`sort_order`,`is_active`,`created_utc`) values 
+(1,'1P GPRS',1,1,now()),
+(2,'3P WC GPRS UNI',2,1,now()),
+(3,'3P WC GPRS BI',3,1,now()),
+(4,'3P WC NO AMR UNI',4,1,now()),
+(5,'3P WC NO AMR BI',5,1,now()),
+(6,'LT/HT GPRS UNI',6,1,now()),
+(7,'LT/HT GPRS BI',7,1,now()),
+(8,'LT NON AMR',8,1,now()),
+(9,'HT NON AMR',9,1,now()),
+(10,'SMCD',10,1,now()),
+(11,'P202',11,1,now()),
+(12,'1P NON AMR',12,1,now());
+
 /*Table structure for table `meter_key_rows` */
 
 DROP TABLE IF EXISTS `meter_key_rows`;

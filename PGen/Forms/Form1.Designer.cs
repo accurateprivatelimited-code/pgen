@@ -37,7 +37,6 @@ namespace PGen
             numSets = new NumericUpDown();
             btnGenerate = new Button();
             btnCancel = new Button();
-            btnCopySelected = new Button();
             btnExport8 = new Button();
             btnExport32 = new Button();
             grpSecurity = new GroupBox();
@@ -81,7 +80,7 @@ namespace PGen
             // lblType
             // 
             lblType.AutoSize = true;
-            lblType.Location = new Point(16, 93);
+            lblType.Location = new Point(801, 41);
             lblType.Name = "lblType";
             lblType.Size = new Size(83, 20);
             lblType.TabIndex = 1;
@@ -90,7 +89,7 @@ namespace PGen
             // lblSets
             // 
             lblSets.AutoSize = true;
-            lblSets.Location = new Point(754, 93);
+            lblSets.Location = new Point(1097, 39);
             lblSets.Name = "lblSets";
             lblSets.Size = new Size(36, 20);
             lblSets.TabIndex = 3;
@@ -107,17 +106,14 @@ namespace PGen
             grpInputs.Controls.Add(numSets);
             grpInputs.Controls.Add(btnGenerate);
             grpInputs.Controls.Add(btnCancel);
-            grpInputs.Controls.Add(btnCopySelected);
-            grpInputs.Controls.Add(btnExport8);
-            grpInputs.Controls.Add(btnExport32);
-            grpInputs.Location = new Point(14, 16);
+            grpInputs.Location = new Point(14, 34);
             grpInputs.Margin = new Padding(3, 4, 3, 4);
             grpInputs.Name = "grpInputs";
             grpInputs.Padding = new Padding(3, 4, 3, 4);
-            grpInputs.Size = new Size(1326, 163);
+            grpInputs.Size = new Size(1326, 145);
             grpInputs.TabIndex = 0;
             grpInputs.TabStop = false;
-            grpInputs.Text = "Inputs";
+            grpInputs.Text = "Keys Generation";
             // 
             // txtMsnOrRange
             // 
@@ -132,7 +128,7 @@ namespace PGen
             // 
             cboMeterType.DropDownStyle = ComboBoxStyle.DropDownList;
             cboMeterType.FormattingEnabled = true;
-            cboMeterType.Location = new Point(194, 89);
+            cboMeterType.Location = new Point(900, 35);
             cboMeterType.Margin = new Padding(3, 4, 3, 4);
             cboMeterType.Name = "cboMeterType";
             cboMeterType.Size = new Size(171, 28);
@@ -140,7 +136,7 @@ namespace PGen
             // 
             // numSets
             // 
-            numSets.Location = new Point(800, 89);
+            numSets.Location = new Point(1143, 35);
             numSets.Margin = new Padding(3, 4, 3, 4);
             numSets.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numSets.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -151,7 +147,7 @@ namespace PGen
             // 
             // btnGenerate
             // 
-            btnGenerate.Location = new Point(903, 35);
+            btnGenerate.Location = new Point(1039, 95);
             btnGenerate.Margin = new Padding(3, 4, 3, 4);
             btnGenerate.Name = "btnGenerate";
             btnGenerate.Size = new Size(126, 33);
@@ -163,7 +159,7 @@ namespace PGen
             // btnCancel
             // 
             btnCancel.Enabled = false;
-            btnCancel.Location = new Point(1040, 35);
+            btnCancel.Location = new Point(1176, 95);
             btnCancel.Margin = new Padding(3, 4, 3, 4);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(126, 33);
@@ -172,20 +168,9 @@ namespace PGen
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
             // 
-            // btnCopySelected
-            // 
-            btnCopySelected.Location = new Point(903, 88);
-            btnCopySelected.Margin = new Padding(3, 4, 3, 4);
-            btnCopySelected.Name = "btnCopySelected";
-            btnCopySelected.Size = new Size(263, 33);
-            btnCopySelected.TabIndex = 7;
-            btnCopySelected.Text = "Copy Selected (MSN\\tAK\\tEK)";
-            btnCopySelected.UseVisualStyleBackColor = true;
-            btnCopySelected.Click += btnCopySelected_Click;
-            // 
             // btnExport8
             // 
-            btnExport8.Location = new Point(1177, 35);
+            btnExport8.Location = new Point(1024, 28);
             btnExport8.Margin = new Padding(3, 4, 3, 4);
             btnExport8.Name = "btnExport8";
             btnExport8.Size = new Size(126, 33);
@@ -196,10 +181,10 @@ namespace PGen
             // 
             // btnExport32
             // 
-            btnExport32.Location = new Point(1177, 88);
+            btnExport32.Location = new Point(1172, 28);
             btnExport32.Margin = new Padding(3, 4, 3, 4);
             btnExport32.Name = "btnExport32";
-            btnExport32.Size = new Size(126, 33);
+            btnExport32.Size = new Size(138, 33);
             btnExport32.TabIndex = 9;
             btnExport32.Text = "Export Excel (32)";
             btnExport32.UseVisualStyleBackColor = true;
@@ -245,6 +230,8 @@ namespace PGen
             grpSearch.Controls.Add(lblFilterField);
             grpSearch.Controls.Add(cboFilterField);
             grpSearch.Controls.Add(btnClearSearch);
+            grpSearch.Controls.Add(btnExport8);
+            grpSearch.Controls.Add(btnExport32);
             grpSearch.Location = new Point(14, 275);
             grpSearch.Margin = new Padding(3, 4, 3, 4);
             grpSearch.Name = "grpSearch";
@@ -438,7 +425,6 @@ namespace PGen
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnExport8;
         private System.Windows.Forms.Button btnExport32;
-        private System.Windows.Forms.Button btnCopySelected;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.ComboBox cboFilterField;
         private System.Windows.Forms.Button btnClearSearch;

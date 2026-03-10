@@ -31,6 +31,13 @@ public partial class RoleManagementForm : Form
         chkDeleteRoles.Enabled = hasEditRoles;
         chkPasswordGeneration.Enabled = hasEditRoles;
         chkManageLicenses.Enabled = hasEditRoles;
+
+        // configure admin menu availability
+        menuCreateLicense.Enabled = AuthService.HasRight(_currentUser, UserRight.ManageLicenses);
+        menuManageUsers.Enabled = AuthService.HasRight(_currentUser, UserRight.CreateUsers) ||
+                                  AuthService.HasRight(_currentUser, UserRight.EditUsers) ||
+                                  AuthService.HasRight(_currentUser, UserRight.DeleteUsers);
+        menuManageRoles.Enabled = false; // already on role management
     }
 
     private async void RoleManagementForm_Load(object sender, EventArgs e)
@@ -236,5 +243,38 @@ public partial class RoleManagementForm : Form
     {
         DialogResult = DialogResult.Retry;
         Close();
+    }
+
+    private void menuCreateLicense_Click(object sender, EventArgs e)
+    {
+        if (!menuCreateLicense.Enabled)
+            return;
+
+        using var dlg = new LicenseAdminForm(_currentUser);
+        var result = dlg.ShowDialog(this);
+        if (result == DialogResult.Retry)
+        {
+            DialogResult = DialogResult.Retry;
+            Close();
+        }
+    }
+
+    private void menuManageUsers_Click(object sender, EventArgs e)
+    {
+        if (!menuManageUsers.Enabled)
+            return;
+
+        using var dlg = new UserManagementForm(_currentUser);
+        var result = dlg.ShowDialog(this);
+        if (result == DialogResult.Retry)
+        {
+            DialogResult = DialogResult.Retry;
+            Close();
+        }
+    }
+
+    private void menuManageRoles_Click(object sender, EventArgs e)
+    {
+        // already on role management; nothing to do
     }
 }

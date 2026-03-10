@@ -17,75 +17,85 @@ namespace PGen
 
         private void InitializeComponent()
         {
-            var lblUser = new System.Windows.Forms.Label();
-            var lblMachine = new System.Windows.Forms.Label();
-            var lblDays = new System.Windows.Forms.Label();
-            cboUser = new System.Windows.Forms.ComboBox();
-            txtMachineId = new System.Windows.Forms.TextBox();
-            numDays = new System.Windows.Forms.NumericUpDown();
-            btnGenerate = new System.Windows.Forms.Button();
-            btnClose = new System.Windows.Forms.Button();
-            btnLogout = new System.Windows.Forms.Button();
+            lblUser = new Label();
+            lblMachine = new Label();
+            lblDays = new Label();
+            cboUser = new ComboBox();
+            txtMachineId = new TextBox();
+            numDays = new NumericUpDown();
+            btnGenerate = new Button();
+            btnClose = new Button();
+            btnLogout = new Button();
+            menuStrip = new MenuStrip();
+            menuAdmin = new ToolStripMenuItem();
+            menuCreateLicense = new ToolStripMenuItem();
+            menuManageUsers = new ToolStripMenuItem();
+            menuManageRoles = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)numDays).BeginInit();
+            menuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // lblUser
             // 
             lblUser.AutoSize = true;
-            lblUser.Location = new System.Drawing.Point(20, 20);
+            lblUser.Location = new Point(16, 55);
             lblUser.Name = "lblUser";
-            lblUser.Size = new System.Drawing.Size(30, 15);
+            lblUser.Size = new Size(38, 20);
             lblUser.TabIndex = 0;
             lblUser.Text = "User";
-            // 
-            // cboUser
-            // 
-            cboUser.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            cboUser.Location = new System.Drawing.Point(110, 17);
-            cboUser.Name = "cboUser";
-            cboUser.Size = new System.Drawing.Size(220, 23);
-            cboUser.TabIndex = 1;
             // 
             // lblMachine
             // 
             lblMachine.AutoSize = true;
-            lblMachine.Location = new System.Drawing.Point(20, 60);
+            lblMachine.Location = new Point(16, 108);
             lblMachine.Name = "lblMachine";
-            lblMachine.Size = new System.Drawing.Size(70, 15);
+            lblMachine.Size = new Size(84, 20);
             lblMachine.TabIndex = 2;
             lblMachine.Text = "Machine ID";
             // 
             // lblDays
             // 
             lblDays.AutoSize = true;
-            lblDays.Location = new System.Drawing.Point(20, 100);
+            lblDays.Location = new Point(16, 161);
             lblDays.Name = "lblDays";
-            lblDays.Size = new System.Drawing.Size(68, 15);
+            lblDays.Size = new Size(86, 20);
             lblDays.TabIndex = 3;
             lblDays.Text = "Valid (days)";
             // 
+            // cboUser
+            // 
+            cboUser.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboUser.Location = new Point(119, 51);
+            cboUser.Margin = new Padding(3, 4, 3, 4);
+            cboUser.Name = "cboUser";
+            cboUser.Size = new Size(251, 28);
+            cboUser.TabIndex = 1;
+            // 
             // txtMachineId
             // 
-            txtMachineId.Location = new System.Drawing.Point(110, 57);
+            txtMachineId.Location = new Point(119, 104);
+            txtMachineId.Margin = new Padding(3, 4, 3, 4);
             txtMachineId.Name = "txtMachineId";
-            txtMachineId.Size = new System.Drawing.Size(420, 23);
+            txtMachineId.Size = new Size(479, 27);
             txtMachineId.TabIndex = 4;
             // 
             // numDays
             // 
-            numDays.Location = new System.Drawing.Point(110, 97);
+            numDays.Location = new Point(119, 157);
+            numDays.Margin = new Padding(3, 4, 3, 4);
             numDays.Maximum = new decimal(new int[] { 3650, 0, 0, 0 });
             numDays.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numDays.Name = "numDays";
-            numDays.Size = new System.Drawing.Size(100, 23);
+            numDays.Size = new Size(114, 27);
             numDays.TabIndex = 3;
             numDays.Value = new decimal(new int[] { 365, 0, 0, 0 });
             // 
             // btnGenerate
             // 
-            btnGenerate.Location = new System.Drawing.Point(330, 100);
+            btnGenerate.Location = new Point(370, 161);
+            btnGenerate.Margin = new Padding(3, 4, 3, 4);
             btnGenerate.Name = "btnGenerate";
-            btnGenerate.Size = new System.Drawing.Size(95, 27);
+            btnGenerate.Size = new Size(109, 36);
             btnGenerate.TabIndex = 4;
             btnGenerate.Text = "Generate";
             btnGenerate.UseVisualStyleBackColor = true;
@@ -93,9 +103,10 @@ namespace PGen
             // 
             // btnClose
             // 
-            btnClose.Location = new System.Drawing.Point(435, 100);
+            btnClose.Location = new Point(490, 161);
+            btnClose.Margin = new Padding(3, 4, 3, 4);
             btnClose.Name = "btnClose";
-            btnClose.Size = new System.Drawing.Size(95, 27);
+            btnClose.Size = new Size(109, 36);
             btnClose.TabIndex = 5;
             btnClose.Text = "Close";
             btnClose.UseVisualStyleBackColor = true;
@@ -103,20 +114,61 @@ namespace PGen
             // 
             // btnLogout
             // 
-            btnLogout.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            btnLogout.Location = new System.Drawing.Point(469, 12);
+            btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLogout.Location = new Point(524, 50);
+            btnLogout.Margin = new Padding(3, 4, 3, 4);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new System.Drawing.Size(75, 23);
+            btnLogout.Size = new Size(86, 31);
             btnLogout.TabIndex = 6;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = true;
             btnLogout.Click += btnLogout_Click;
             // 
+            // menuStrip
+            // 
+            menuStrip.ImageScalingSize = new Size(20, 20);
+            menuStrip.Items.AddRange(new ToolStripItem[] { menuAdmin });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Padding = new Padding(7, 3, 0, 3);
+            menuStrip.Size = new Size(622, 30);
+            menuStrip.TabIndex = 7;
+            menuStrip.Text = "menuStrip1";
+            // 
+            // menuAdmin
+            // 
+            menuAdmin.DropDownItems.AddRange(new ToolStripItem[] { menuCreateLicense, menuManageUsers, menuManageRoles });
+            menuAdmin.Name = "menuAdmin";
+            menuAdmin.Size = new Size(67, 24);
+            menuAdmin.Text = "Admin";
+            // 
+            // menuCreateLicense
+            // 
+            menuCreateLicense.Name = "menuCreateLicense";
+            menuCreateLicense.Size = new Size(247, 26);
+            menuCreateLicense.Text = "Create Machine License";
+            menuCreateLicense.Click += menuCreateLicense_Click;
+            // 
+            // menuManageUsers
+            // 
+            menuManageUsers.Name = "menuManageUsers";
+            menuManageUsers.Size = new Size(247, 26);
+            menuManageUsers.Text = "Manage Users";
+            menuManageUsers.Click += menuManageUsers_Click;
+            // 
+            // menuManageRoles
+            // 
+            menuManageRoles.Name = "menuManageRoles";
+            menuManageRoles.Size = new Size(247, 26);
+            menuManageRoles.Text = "Manage Roles";
+            menuManageRoles.Click += menuManageRoles_Click;
+            // 
             // LicenseAdminForm
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(544, 143);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(622, 246);
+            Controls.Add(menuStrip);
             Controls.Add(btnLogout);
             Controls.Add(btnClose);
             Controls.Add(btnGenerate);
@@ -126,13 +178,16 @@ namespace PGen
             Controls.Add(lblDays);
             Controls.Add(lblMachine);
             Controls.Add(lblUser);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "LicenseAdminForm";
-            StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Admin - Create License";
             ((System.ComponentModel.ISupportInitialize)numDays).EndInit();
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -145,6 +200,14 @@ namespace PGen
         private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.MenuStrip menuStrip;
+        private System.Windows.Forms.ToolStripMenuItem menuAdmin;
+        private System.Windows.Forms.ToolStripMenuItem menuCreateLicense;
+        private System.Windows.Forms.ToolStripMenuItem menuManageUsers;
+        private System.Windows.Forms.ToolStripMenuItem menuManageRoles;
+        private Label lblUser;
+        private Label lblMachine;
+        private Label lblDays;
     }
 }
 
