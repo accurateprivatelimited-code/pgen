@@ -30,21 +30,7 @@ CREATE TABLE `licenses` (
   PRIMARY KEY (`id`),
   KEY `FK_licenses_user` (`generated_for`),
   CONSTRAINT `FK_licenses_user` FOREIGN KEY (`generated_for`) REFERENCES `users` (`username`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Table structure for table `meter_types` */
-
-DROP TABLE IF EXISTS `meter_types`;
-
-CREATE TABLE `meter_types` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL COMMENT 'Display name for meter type',
-  `sort_order` int(11) NOT NULL DEFAULT 0 COMMENT 'Order in dropdown (lower first)',
-  `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  `created_utc` datetime NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `ux_meter_types_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Table structure for table `meter_key_rows` */
 
@@ -64,7 +50,21 @@ CREATE TABLE `meter_key_rows` (
   `created_utc` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_keys_unique` (`ak8`,`ek8`,`ak32`,`ek32`)
-) ENGINE=InnoDB AUTO_INCREMENT=1356 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1570 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Table structure for table `meter_types` */
+
+DROP TABLE IF EXISTS `meter_types`;
+
+CREATE TABLE `meter_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL COMMENT 'Display name for meter type',
+  `sort_order` int(11) NOT NULL DEFAULT 0 COMMENT 'Order in dropdown (lower first)',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_utc` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_meter_types_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Table structure for table `roles` */
 
@@ -88,9 +88,11 @@ CREATE TABLE `users` (
   `username` varchar(100) NOT NULL,
   `password_hash` char(64) NOT NULL COMMENT 'SHA‑256 hex string',
   `role_id` varchar(36) NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Soft delete flag - FALSE means user is deactivated',
   `created_utc` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`username`),
   KEY `FK_users_role` (`role_id`),
+  KEY `idx_users_active` (`is_active`),
   CONSTRAINT `FK_users_role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -128,7 +130,7 @@ DELIMITER $$
     IN p_password_hash CHAR(64)
 )
 BEGIN
-    SELECT username, role_id
+    SELECT username, role_id,is_active
     FROM users
     WHERE username = p_username
       AND password_hash = p_password_hash;
