@@ -59,7 +59,7 @@ public partial class UserManagementForm : Form
         dgvUsers.AutoGenerateColumns = false;
         var users = await AuthService.GetUsersAsync();
         
-        // Enrich users with role names
+        // Enrich users with role names and active status
         var enrichedUsers = new List<object>();
         foreach (var u in users)
         {
@@ -68,7 +68,9 @@ public partial class UserManagementForm : Form
             {
                 u.UserName,
                 RoleName = role?.Name ?? "Unknown",
-                u.RoleId
+                u.RoleId,
+                u.IsActive,
+                StatusText = u.IsActive ? "Active" : "Inactive"
             });
         }
         
@@ -173,22 +175,38 @@ public partial class UserManagementForm : Form
 
     private async void btnDelete_Click(object sender, EventArgs e)
     {
-
         var selected = GetSelectedUserName();
         if (selected is null)
             return;
 
-        if (MessageBox.Show(this, $"Delete user '{selected}'?", "Confirm delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+        var users = await AuthService.GetUsersAsync();
+        var user = users.FirstOrDefault(u => string.Equals(u.UserName, selected, StringComparison.OrdinalIgnoreCase));
+        if (user == null)
+            return;
+
+        var action = user.IsActive ? "deactivate" : "activate";
+        var actionText = user.IsActive ? "Deactivate" : "Activate";
+        
+        if (MessageBox.Show(this, $"{actionText} user '{selected}'?", $"Confirm {action}", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
             return;
 
         try
         {
-            await AuthService.DeleteUserAsync(selected);
+            if (user.IsActive)
+            {
+                await AuthService.DeactivateUserAsync(selected);
+                MessageBox.Show(this, $"User '{selected}' has been deactivated.", "User Deactivated", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                await AuthService.ActivateUserAsync(selected);
+                MessageBox.Show(this, $"User '{selected}' has been activated.", "User Activated", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             await ReloadUsers();
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.Message, "Delete failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, ex.Message, $"{actionText} failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

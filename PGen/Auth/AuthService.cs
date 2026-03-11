@@ -37,11 +37,16 @@ internal static class AuthService
         using var reader = cmd.ExecuteReader();
         if (reader.Read())
         {
+            var isActive = reader.GetBoolean("is_active");
+            if (!isActive)
+                return null; // Inactive users cannot authenticate
+                
             return new UserAccount
             {
                 UserName = reader.GetString("username"),
                 PasswordHash = hash,
-                RoleId = reader.GetString("role_id")
+                RoleId = reader.GetString("role_id"),
+                IsActive = isActive
             };
         }
         return null;
@@ -57,11 +62,16 @@ internal static class AuthService
         await using var reader = await cmd.ExecuteReaderAsync();
         if (await reader.ReadAsync())
         {
+            var isActive = reader.GetBoolean("is_active");
+            if (!isActive)
+                return null; // Inactive users cannot authenticate
+                
             return new UserAccount
             {
                 UserName = reader.GetString("username"),
                 PasswordHash = hash,
-                RoleId = reader.GetString("role_id")
+                RoleId = reader.GetString("role_id"),
+                IsActive = isActive
             };
         }
         return null;
@@ -71,7 +81,7 @@ internal static class AuthService
     {
         var list = new List<UserAccount>();
         using var conn = Database.CreateConnection();
-        using var cmd = new MySqlCommand("SELECT username,password_hash,role_id FROM users ORDER BY role_id,username", conn);
+        using var cmd = new MySqlCommand("SELECT username,password_hash,role_id,is_active FROM users ORDER BY is_active DESC, role_id,username", conn);
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
@@ -79,7 +89,8 @@ internal static class AuthService
             {
                 UserName = reader.GetString("username"),
                 PasswordHash = reader.GetString("password_hash"),
-                RoleId = reader.GetString("role_id")
+                RoleId = reader.GetString("role_id"),
+                IsActive = reader.GetBoolean("is_active")
             });
         }
         return list;
@@ -89,7 +100,7 @@ internal static class AuthService
     {
         var list = new List<UserAccount>();
         await using var conn = await Database.CreateConnectionAsync();
-        await using var cmd = new MySqlCommand("SELECT username,password_hash,role_id FROM users ORDER BY role_id,username", conn);
+        await using var cmd = new MySqlCommand("SELECT username,password_hash,role_id,is_active FROM users ORDER BY is_active DESC, role_id,username", conn);
         await using var reader = await cmd.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
@@ -97,7 +108,8 @@ internal static class AuthService
             {
                 UserName = reader.GetString("username"),
                 PasswordHash = reader.GetString("password_hash"),
-                RoleId = reader.GetString("role_id")
+                RoleId = reader.GetString("role_id"),
+                IsActive = reader.GetBoolean("is_active")
             });
         }
         return list;
@@ -249,18 +261,32 @@ internal static class AuthService
         cmd.ExecuteNonQuery();
     }
 
-    public static async Task DeleteUserAsync(string username)
+    public static async Task DeactivateUserAsync(string username)
     {
         username = (username ?? string.Empty).Trim();
         if (username.Length == 0)
             throw new ArgumentException("User name is required.");
         if (string.Equals(username, "admin", StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("Cannot delete the admin account.");
+            throw new InvalidOperationException("Cannot deactivate the admin account.");
 
         await using var conn = await Database.CreateConnectionAsync();
-        await using var cmd = new MySqlCommand("sp_DeleteUser", conn) { CommandType = CommandType.StoredProcedure };
-        cmd.Parameters.AddWithValue("p_username", username);
-        await cmd.ExecuteNonQueryAsync();
+        await using var cmd = new MySqlCommand("UPDATE users SET is_active = FALSE WHERE username = @user", conn);
+        cmd.Parameters.AddWithValue("@user", username);
+        if (await cmd.ExecuteNonQueryAsync() == 0)
+            throw new InvalidOperationException("User not found.");
+    }
+
+    public static async Task ActivateUserAsync(string username)
+    {
+        username = (username ?? string.Empty).Trim();
+        if (username.Length == 0)
+            throw new ArgumentException("User name is required.");
+
+        await using var conn = await Database.CreateConnectionAsync();
+        await using var cmd = new MySqlCommand("UPDATE users SET is_active = TRUE WHERE username = @user", conn);
+        cmd.Parameters.AddWithValue("@user", username);
+        if (await cmd.ExecuteNonQueryAsync() == 0)
+            throw new InvalidOperationException("User not found.");
     }
 
     public static bool HasRight(UserAccount user, UserRight right)

@@ -20,6 +20,7 @@ namespace PGen
             dgvUsers = new DataGridView();
             colUser = new DataGridViewTextBoxColumn();
             colRole = new DataGridViewTextBoxColumn();
+            colStatus = new DataGridViewTextBoxColumn();
             btnAdd = new Button();
             btnResetPassword = new Button();
             btnDelete = new Button();
@@ -41,7 +42,7 @@ namespace PGen
             dgvUsers.AllowUserToDeleteRows = false;
             dgvUsers.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvUsers.Columns.AddRange(new DataGridViewColumn[] { colUser, colRole });
+            dgvUsers.Columns.AddRange(new DataGridViewColumn[] { colUser, colRole, colStatus });
             dgvUsers.Location = new Point(14, 73);
             dgvUsers.Margin = new Padding(3, 4, 3, 4);
             dgvUsers.MultiSelect = false;
@@ -70,6 +71,15 @@ namespace PGen
             colRole.Name = "colRole";
             colRole.ReadOnly = true;
             colRole.Width = 180;
+            // 
+            // colStatus
+            // 
+            colStatus.DataPropertyName = "StatusText";
+            colStatus.HeaderText = "Status";
+            colStatus.MinimumWidth = 6;
+            colStatus.Name = "colStatus";
+            colStatus.ReadOnly = true;
+            colStatus.Width = 80;
             // 
             // btnAdd
             // 
@@ -103,7 +113,7 @@ namespace PGen
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(103, 36);
             btnDelete.TabIndex = 3;
-            btnDelete.Text = "Delete user";
+            btnDelete.Text = "Toggle Active";
             btnDelete.UseVisualStyleBackColor = true;
             btnDelete.Click += btnDelete_Click;
             // 
@@ -224,6 +234,7 @@ namespace PGen
         private System.Windows.Forms.ToolStripMenuItem menuManageRoles;
         private DataGridViewTextBoxColumn colUser;
         private DataGridViewTextBoxColumn colRole;
+        private DataGridViewTextBoxColumn colStatus;
     }
 }
 
