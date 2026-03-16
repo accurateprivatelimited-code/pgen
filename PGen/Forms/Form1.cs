@@ -354,9 +354,9 @@ namespace PGen
                 //    EditGroupRow(gr);
                 //    break;
                     
-                case "colDelete":
-                    DeleteGroupRow(gr);
-                    break;
+                //case "colDelete":
+                //    DeleteGroupRow(gr);
+                //    break;
             }
         }
 
@@ -942,15 +942,15 @@ namespace PGen
             //{
             //    HeaderText = "Edit",
             //    Name = "colEdit",
-            dgvResults.Columns.Add(new DataGridViewButtonColumn
-            {
-                HeaderText = "Delete",
-                Name = "colDelete",
-                ReadOnly = true,
-                Text = "Delete",
-                UseColumnTextForButtonValue = true,
-                Width = 55
-            });
+            //dgvResults.Columns.Add(new DataGridViewButtonColumn
+            //{
+            //    HeaderText = "Delete",
+            //    Name = "colDelete",
+            //    ReadOnly = true,
+            //    Text = "Delete",
+            //    UseColumnTextForButtonValue = true,
+            //    Width = 55
+            //});
 
             dgvResults.DataSource = dt;
         }

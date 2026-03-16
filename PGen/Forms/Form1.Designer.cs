@@ -322,10 +322,10 @@ namespace PGen
             dgvResults.Location = new Point(14, 360);
             dgvResults.Margin = new Padding(3, 4, 3, 4);
             dgvResults.Name = "dgvResults";
-            dgvResults.ReadOnly = false;
-            dgvResults.RowHeadersVisible = false;
+            dgvResults.ReadOnly = true;
+            dgvResults.RowHeadersVisible = true;
             dgvResults.RowHeadersWidth = 51;
-            dgvResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvResults.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dgvResults.Size = new Size(1327, 469);
             dgvResults.TabIndex = 2;
             dgvResults.CellContentClick += dgvResults_CellContentClick;
