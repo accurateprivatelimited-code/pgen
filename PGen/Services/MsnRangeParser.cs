@@ -31,6 +31,12 @@ internal static class MsnRangeParser
             if (end < start)
                 throw new ArgumentException("Range end must be >= start.");
 
+            // Validate that first 4 digits are the same for range
+            var startFirst4 = startRaw.PadLeft(width, '0').Substring(0, 4);
+            var endFirst4 = endRaw.PadLeft(width, '0').Substring(0, 4);
+            if (startFirst4 != endFirst4)
+                throw new ArgumentException("First 4 digits must be the same for range generation.");
+
             var count = end - start + 1;
             if (count > 2_000_000)
                 throw new ArgumentException("Range too large. Please use <= 2,000,000 items.");

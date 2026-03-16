@@ -9,6 +9,7 @@ internal sealed class MeterKeyRow
     public required string MeterType { get; init; }
     public required string Model { get; init; }
     public int SetIndex { get; init; }
+    public string? PoNumber { get; init; }
 
     private string _ak8 = string.Empty;
     private string _ek8 = string.Empty;

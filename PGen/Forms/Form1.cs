@@ -29,6 +29,9 @@ namespace PGen
 
             LoadMeterTypes();
 
+            // Add auto-selection for meter type based on MSN prefix
+            txtMsnOrRange.TextChanged += (s, e) => AutoSelectMeterType();
+
 
 
             cboFilterField.Items.AddRange(new object[] { "All Fields", "MSN", "Type", "AK8", "EK8", "AK32", "EK32" });
@@ -82,6 +85,114 @@ namespace PGen
             cboMeterType.SelectedIndex = 0;
         }
 
+        private string GetMeterTypeForMsnPrefix(string msnPrefix)
+        {
+            return msnPrefix switch
+            {
+                "2997" => "1P GPRS", // Default to first option for 2997
+                "2998" => "3P WC GPRS UNI", // Default to first option for 2998
+                "2999" => "LT/HT GPRS UNI", // Default to first option for 2999
+                _ => string.Empty
+            };
+        }
+
+        private string[] GetMeterTypesForPrefix(string msnPrefix, List<string> allMeterTypes)
+        {
+            var prefixGroups = new Dictionary<string, string[]>
+            {
+                ["2997"] = new[] { "1P GPRS", "1P NON AMR" },
+                ["2998"] = new[] { "3P WC GPRS UNI", "3P WC GPRS BI", "3P WC NO AMR UNI", "3P WC NO AMR BI" },
+                ["2999"] = new[] { "LT/HT GPRS UNI", "LT/HT GPRS BI", "LT NON AMR", "HT NON AMR", "SMCD", "P202" }
+            };
+
+            if (!prefixGroups.TryGetValue(msnPrefix, out var allowedTypes))
+                return allMeterTypes.ToArray(); // Return all types for unknown prefixes
+
+            // Filter database meter types to only include those that match allowed types for this prefix
+            var filteredTypes = allMeterTypes
+                .Where(type => allowedTypes.Contains(type))
+                .OrderBy(type => Array.IndexOf(allowedTypes, type)) // Maintain order from prefix groups
+                .ToArray();
+
+            return filteredTypes.Length > 0 ? filteredTypes : allMeterTypes.ToArray();
+        }
+
+        private void AutoSelectMeterType()
+        {
+            var input = txtMsnOrRange.Text.Trim();
+            if (string.IsNullOrEmpty(input))
+            {
+                // Show all meter types when input is empty
+                LoadMeterTypes();
+                return;
+            }
+
+            // Extract the first 4 digits from single MSN or range start
+            var match = System.Text.RegularExpressions.Regex.Match(input, @"^(\d{4})");
+            if (match.Success)
+            {
+                var prefix = match.Groups[1].Value;
+
+                // Get all meter types from database
+                var allMeterTypes = new List<string>();
+                try
+                {
+                    allMeterTypes = MeterTypeRepository.GetMeterTypes();
+                }
+                catch
+                {
+                    // Fallback to default list if DB unavailable
+                    allMeterTypes = new[] {
+                        "1P GPRS", "3P WC GPRS UNI", "3P WC GPRS BI", "3P WC NO AMR UNI", "3P WC NO AMR BI",
+                        "LT/HT GPRS UNI", "LT/HT GPRS BI", "LT NON AMR", "HT NON AMR", "SMCD", "P202", "1P NON AMR"
+                    }.ToList();
+                }
+
+                var allowedTypes = GetMeterTypesForPrefix(prefix, allMeterTypes);
+
+                if (allowedTypes.Length > 0 && allowedTypes.Length < allMeterTypes.Count)
+                {
+                    // Filter dropdown to show only allowed types
+                    var selectedItem = cboMeterType.SelectedItem?.ToString();
+                    cboMeterType.Items.Clear();
+                    cboMeterType.Items.AddRange(allowedTypes);
+
+                    // Try to select the previously selected item if it's still allowed
+                    var index = Array.IndexOf(allowedTypes, selectedItem);
+                    if (index >= 0)
+                    {
+                        cboMeterType.SelectedIndex = index;
+                    }
+                    else
+                    {
+                        // Select the default type for this prefix
+                        var defaultType = allowedTypes.FirstOrDefault();
+                        if (defaultType != null)
+                        {
+                            cboMeterType.SelectedIndex = Array.IndexOf(allowedTypes, defaultType);
+                        }
+                        else
+                        {
+                            cboMeterType.SelectedIndex = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    // Show all meter types for unknown prefixes or if no filtering needed
+                    cboMeterType.Items.Clear();
+                    cboMeterType.Items.AddRange(allMeterTypes.ToArray());
+                    if (cboMeterType.Items.Count > 0)
+                        cboMeterType.SelectedIndex = 0;
+                }
+            }
+            else
+            {
+                // Show all meter types when no valid prefix found
+                LoadMeterTypes();
+            }
+        }
+
         private async void btnGenerate_Click(object sender, EventArgs e)
         {
             if (_cts is not null)
@@ -90,6 +201,7 @@ namespace PGen
             try
             {
                 var msns = MsnRangeParser.Parse(txtMsnOrRange.Text);
+                var poNumbers = PoRangeParser.Parse(txtPoNumber.Text);
                 var meterType = (cboMeterType.SelectedItem?.ToString() ?? string.Empty).Trim();
                 var sets = (int)numSets.Value;
 
@@ -115,8 +227,29 @@ namespace PGen
                     progress: progress,
                     cancellationToken: _cts.Token));
 
+                // Assign PO Numbers to generated rows
+                var rowsWithPo = new List<MeterKeyRow>();
+                var poIndex = 0;
+                foreach (var row in rows)
+                {
+                    var poNumber = poNumbers.Count > 0 ? poNumbers[poIndex % poNumbers.Count] : null;
+                    rowsWithPo.Add(new MeterKeyRow
+                    {
+                        Msn = row.Msn,
+                        MeterType = row.MeterType,
+                        Model = row.Model ?? string.Empty,
+                        SetIndex = row.SetIndex,
+                        Ak8 = row.Ak8,
+                        Ek8 = row.Ek8,
+                        Ak32 = row.Ak32,
+                        Ek32 = row.Ek32,
+                        PoNumber = poNumber
+                    });
+                    poIndex++;
+                }
+
                 // Deduplicate: overwrite existing rows with same key (Msn, MeterType, Model, SetIndex)
-                var deduped = DeduplicateRows(rows);
+                var deduped = DeduplicateRows(rowsWithPo);
                 _rows.RaiseListChangedEvents = false;
                 _rows.Clear();
                 foreach (var r in deduped)
@@ -125,20 +258,27 @@ namespace PGen
 
                 ApplyFilter();
 
-                // persist rows to database; ignore failures so the UI stay responsive
-                try
+                // persist rows to database in background; ignore failures so the UI stay responsive
+                _ = Task.Run(async () =>
                 {
-                    var sessionId = Guid.NewGuid().ToString();
-                    await PGen.Data.MeterKeyRepository.SaveRowsAsync(deduped, sessionId);
-                    toolStatus.Text = $"Done. {GroupRows(_rows).Count:N0} MSN(s), {_rows.Count:N0} keys (saved to DB)";
-                }
-                catch (Exception dbex)
-                {
-                    // log? for now just alert user, but allow normal operation
-                    MessageBox.Show(this, "Warning: failed to save rows to database:\n" + dbex.Message,
-                        "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    toolStatus.Text = $"Done. {GroupRows(_rows).Count:N0} MSN(s) (DB save failed)";
-                }
+                    try
+                    {
+                        var sessionId = Guid.NewGuid().ToString();
+                        await PGen.Data.MeterKeyRepository.SaveRowsAsync(deduped, sessionId);
+                        this.Invoke(() => toolStatus.Text = $"Done. {GroupRows(_rows).Count:N0} MSN(s), {_rows.Count:N0} keys (saved to DB)");
+                    }
+                    catch (Exception dbex)
+                    {
+                        // log? for now just alert user, but allow normal operation
+                        this.Invoke(() => 
+                        {
+                            MessageBox.Show(this, "Warning: failed to save rows to database:\n" + dbex.Message,
+                                "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            toolStatus.Text = $"Done. {GroupRows(_rows).Count:N0} MSN(s) (DB save failed)";
+                        });
+                    }
+                });
+                toolStatus.Text = $"Done. {GroupRows(_rows).Count:N0} MSN(s), {_rows.Count:N0} keys (generating)";
                 progressBar.Value = 100;
             }
             catch (OperationCanceledException)
@@ -227,7 +367,115 @@ namespace PGen
 
         private void btnExport32_Click(object sender, EventArgs e)
         {
-            Export(is32: true);
+            Export32WithOptions();
+        }
+
+        private void Export32WithOptions()
+        {
+            if (_groupedRowsForActions.Count == 0)
+            {
+                MessageBox.Show(this, "No rows to export. Generate first.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Show dialog for export type selection
+            using var dialog = new Form()
+            {
+                Text = "Export 32-Digit Keys",
+                Size = new Size(350, 200),
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false,
+                StartPosition = FormStartPosition.CenterParent
+            };
+
+            var grpExportType = new GroupBox()
+            {
+                Text = "Export Type",
+                Location = new Point(20, 20),
+                Size = new Size(290, 80)
+            };
+
+            var rbMDC = new RadioButton()
+            {
+                Text = "MDC (All Sets)",
+                Location = new Point(20, 25),
+                Size = new Size(120, 20),
+                Checked = true
+            };
+
+            var rbMeter = new RadioButton()
+            {
+                Text = "Meter (First Set Only)",
+                Location = new Point(20, 50),
+                Size = new Size(180, 20)
+            };
+
+            grpExportType.Controls.Add(rbMDC);
+            grpExportType.Controls.Add(rbMeter);
+
+            var btnOK = new Button()
+            {
+                Text = "OK",
+                Location = new Point(80, 110),
+                Size = new Size(80, 30),
+                DialogResult = DialogResult.OK
+            };
+
+            var btnCancel = new Button()
+            {
+                Text = "Cancel",
+                Location = new Point(170, 110),
+                Size = new Size(80, 30),
+                DialogResult = DialogResult.Cancel
+            };
+
+            dialog.Controls.Add(grpExportType);
+            dialog.Controls.Add(btnOK);
+            dialog.Controls.Add(btnCancel);
+            dialog.AcceptButton = btnOK;
+            dialog.CancelButton = btnCancel;
+
+            if (dialog.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            var isMeter = rbMeter.Checked;
+
+            using var sfd = new SaveFileDialog
+            {
+                Filter = "Excel Workbook (*.xlsx)|*.xlsx",
+                FileName = isMeter ? "keys_32_meter.xlsx" : "keys_32_mdc.xlsx",
+                OverwritePrompt = true
+            };
+
+            if (sfd.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            try
+            {
+                toolStatus.Text = "Exporting…";
+                // Export only the filtered data currently displayed in the GridView
+                var visibleRows = _groupedRowsForActions.SelectMany(g => g.Sets).ToList();
+                
+                if (isMeter)
+                {
+                    // For Meter export, only include first set from each group
+                    var meterRows = _groupedRowsForActions.Select(g => g.Sets.FirstOrDefault(s => s.SetIndex == 1)).Where(s => s != null).ToList();
+                    ExcelExporter.Export32Digit(sfd.FileName, meterRows);
+                    toolStatus.Text = $"Exported: {Path.GetFileName(sfd.FileName)} ({meterRows.Count} rows - Meter format)";
+                }
+                else
+                {
+                    // For MDC export, include all sets
+                    ExcelExporter.Export32Digit(sfd.FileName, visibleRows);
+                    toolStatus.Text = $"Exported: {Path.GetFileName(sfd.FileName)} ({visibleRows.Count} rows - MDC format)";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                toolStatus.Text = "Ready.";
+            }
         }
 
         private void Export(bool is32)
@@ -257,7 +505,7 @@ namespace PGen
                     ExcelExporter.Export32Digit(sfd.FileName, visibleRows);
                 else
                     ExcelExporter.Export8Digit(sfd.FileName, visibleRows);
-                toolStatus.Text = $"Exported: {Path.GetFileName(sfd.FileName)} ({visibleRows.Count} rows)";
+                toolStatus.Text = $"Exported: {Path.GetFileName(sfd.FileName)} ({visibleRows.Count} rows from filtered view)";
             }
             catch (Exception ex)
             {
@@ -270,8 +518,9 @@ namespace PGen
         {
             btnGenerate.Enabled = !busy;
             btnCancel.Enabled = busy;
-            btnExport8.Enabled = !busy;
-            btnExport32.Enabled = !busy;
+            // Keep export buttons enabled after generation
+            // btnExport8.Enabled = !busy;
+            // btnExport32.Enabled = !busy;
             txtMsnOrRange.Enabled = !busy;
             cboMeterType.Enabled = !busy;
             numSets.Enabled = !busy;
@@ -557,7 +806,8 @@ namespace PGen
                     row.Ak8.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     row.Ek8.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     row.Ak32.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                    row.Ek32.Contains(searchText, StringComparison.OrdinalIgnoreCase));
+                    row.Ek32.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    (row.PoNumber ?? "").Contains(searchText, StringComparison.OrdinalIgnoreCase));
             }
 
             var grouped = GroupRows(filteredRows);
@@ -581,6 +831,7 @@ namespace PGen
         private void BindGridToTable(List<MeterKeyGroupRow> grouped, int maxSet)
         {
             var dt = new DataTable();
+            dt.Columns.Add("PO Number", typeof(string));
             dt.Columns.Add("MSN", typeof(string));
             dt.Columns.Add("Type", typeof(string));
             for (var i = 1; i <= maxSet; i++)
@@ -599,6 +850,8 @@ namespace PGen
                     setByIndex[r.SetIndex] = r;
 
                 var row = dt.NewRow();
+                // Set PO Number from first set in group (all should have same PO)
+                row["PO Number"] = gr.Sets.FirstOrDefault()?.PoNumber ?? string.Empty;
                 row["MSN"] = gr.Msn;
                 row["Type"] = gr.MeterType;
                 for (var i = 1; i <= maxSet; i++)
@@ -619,10 +872,18 @@ namespace PGen
 
             dgvResults.Columns.Add(new DataGridViewTextBoxColumn
             {
+                DataPropertyName = "PO Number",
+                HeaderText = "PO Number",
+                Name = "colPoNumber",
+                ReadOnly = false,
+                Width = 120
+            });
+            dgvResults.Columns.Add(new DataGridViewTextBoxColumn
+            {
                 DataPropertyName = "MSN",
                 HeaderText = "MSN",
                 Name = "colMsn",
-                ReadOnly = true,
+                ReadOnly = false,
                 Width = 120
             });
             dgvResults.Columns.Add(new DataGridViewTextBoxColumn
@@ -630,7 +891,7 @@ namespace PGen
                 DataPropertyName = "Type",
                 HeaderText = "Type",
                 Name = "colType",
-                ReadOnly = true,
+                ReadOnly = false,
                 Width = 100
             });
             for (var i = 1; i <= maxSet; i++)
@@ -640,7 +901,7 @@ namespace PGen
                     DataPropertyName = $"AK8({i})",
                     HeaderText = $"AK8({i})",
                     Name = $"colAk8_{i}",
-                    ReadOnly = true,
+                    ReadOnly = false,
                     Width = 90
                 });
                 dgvResults.Columns.Add(new DataGridViewTextBoxColumn
@@ -648,7 +909,7 @@ namespace PGen
                     DataPropertyName = $"EK8({i})",
                     HeaderText = $"EK8({i})",
                     Name = $"colEk8_{i}",
-                    ReadOnly = true,
+                    ReadOnly = false,
                     Width = 90
                 });
                 dgvResults.Columns.Add(new DataGridViewTextBoxColumn
@@ -656,7 +917,7 @@ namespace PGen
                     DataPropertyName = $"AK32({i})",
                     HeaderText = $"AK32({i})",
                     Name = $"colAk32_{i}",
-                    ReadOnly = true,
+                    ReadOnly = false,
                     Width = 220
                 });
                 dgvResults.Columns.Add(new DataGridViewTextBoxColumn
@@ -664,7 +925,7 @@ namespace PGen
                     DataPropertyName = $"EK32({i})",
                     HeaderText = $"EK32({i})",
                     Name = $"colEk32_{i}",
-                    ReadOnly = true,
+                    ReadOnly = false,
                     Width = 220
                 });
             }
@@ -681,11 +942,6 @@ namespace PGen
             //{
             //    HeaderText = "Edit",
             //    Name = "colEdit",
-            //    ReadOnly = true,
-            //    Text = "Edit",
-            //    UseColumnTextForButtonValue = true,
-            //    Width = 55
-            //});
             dgvResults.Columns.Add(new DataGridViewButtonColumn
             {
                 HeaderText = "Delete",

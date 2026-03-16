@@ -31,9 +31,9 @@ namespace PGen.Data
             await using var conn = await Database.CreateConnectionAsync();
             await using var tx = await conn.BeginTransactionAsync();
             await using var cmd = new MySqlCommand(
-                "INSERT INTO meter_key_rows (session_id, msn, meter_type, model, set_index, ak8, ek8, ak32, ek32) " +
-                "VALUES (@session, @msn, @meterType, @model, @setIndex, @ak8, @ek8, @ak32, @ek32) " +
-                "ON DUPLICATE KEY UPDATE session_id = VALUES(session_id), msn = VALUES(msn), meter_type = VALUES(meter_type), model = VALUES(model), set_index = VALUES(set_index)",
+                "INSERT INTO meter_key_rows (session_id, msn, meter_type, model, set_index, ak8, ek8, ak32, ek32, po_number) " +
+                "VALUES (@session, @msn, @meterType, @model, @setIndex, @ak8, @ek8, @ak32, @ek32, @poNumber) " +
+                "ON DUPLICATE KEY UPDATE session_id = VALUES(session_id), msn = VALUES(msn), meter_type = VALUES(meter_type), model = VALUES(model), set_index = VALUES(set_index), po_number = VALUES(po_number)",
                 conn, tx);
 
             cmd.Parameters.Add("@session", MySqlDbType.VarChar, 36);
@@ -45,6 +45,7 @@ namespace PGen.Data
             cmd.Parameters.Add("@ek8", MySqlDbType.VarChar, 16);
             cmd.Parameters.Add("@ak32", MySqlDbType.VarChar, 64);
             cmd.Parameters.Add("@ek32", MySqlDbType.VarChar, 64);
+            cmd.Parameters.Add("@poNumber", MySqlDbType.VarChar, 50);
 
             // Use bulk insert for better performance
             foreach (var r in rowsList)
@@ -58,6 +59,7 @@ namespace PGen.Data
                 cmd.Parameters["@ek8"].Value = r.Ek8;
                 cmd.Parameters["@ak32"].Value = r.Ak32;
                 cmd.Parameters["@ek32"].Value = r.Ek32;
+                cmd.Parameters["@poNumber"].Value = (object?)r.PoNumber ?? DBNull.Value;
                 await cmd.ExecuteNonQueryAsync();
             }
 
@@ -88,9 +90,9 @@ namespace PGen.Data
             using var conn = Database.CreateConnection();
             using var tx = conn.BeginTransaction();
             using var cmd = new MySqlCommand(
-                "INSERT INTO meter_key_rows (session_id, msn, meter_type, model, set_index, ak8, ek8, ak32, ek32) " +
-                "VALUES (@session, @msn, @meterType, @model, @setIndex, @ak8, @ek8, @ak32, @ek32) " +
-                "ON DUPLICATE KEY UPDATE session_id = VALUES(session_id), msn = VALUES(msn), meter_type = VALUES(meter_type), model = VALUES(model), set_index = VALUES(set_index)",
+                "INSERT INTO meter_key_rows (session_id, msn, meter_type, model, set_index, ak8, ek8, ak32, ek32, po_number) " +
+                "VALUES (@session, @msn, @meterType, @model, @setIndex, @ak8, @ek8, @ak32, @ek32, @poNumber) " +
+                "ON DUPLICATE KEY UPDATE session_id = VALUES(session_id), msn = VALUES(msn), meter_type = VALUES(meter_type), model = VALUES(model), set_index = VALUES(set_index), po_number = VALUES(po_number)",
                 conn, tx);
 
             cmd.Parameters.Add("@session", MySqlDbType.VarChar, 36);
@@ -102,6 +104,7 @@ namespace PGen.Data
             cmd.Parameters.Add("@ek8", MySqlDbType.VarChar, 16);
             cmd.Parameters.Add("@ak32", MySqlDbType.VarChar, 64);
             cmd.Parameters.Add("@ek32", MySqlDbType.VarChar, 64);
+            cmd.Parameters.Add("@poNumber", MySqlDbType.VarChar, 50);
 
             foreach (var r in rowsList)
             {
@@ -114,6 +117,7 @@ namespace PGen.Data
                 cmd.Parameters["@ek8"].Value = r.Ek8;
                 cmd.Parameters["@ak32"].Value = r.Ak32;
                 cmd.Parameters["@ek32"].Value = r.Ek32;
+                cmd.Parameters["@poNumber"].Value = (object?)r.PoNumber ?? DBNull.Value;
                 cmd.ExecuteNonQuery();
             }
 
@@ -130,7 +134,7 @@ namespace PGen.Data
             
             await using var conn = await Database.CreateConnectionAsync();
             await using var cmd = new MySqlCommand(
-                "UPDATE meter_key_rows SET msn=@msn, meter_type=@meterType, model=@model, set_index=@setIndex, ak8=@ak8, ek8=@ek8, ak32=@ak32, ek32=@ek32 " +
+                "UPDATE meter_key_rows SET msn=@msn, meter_type=@meterType, model=@model, set_index=@setIndex, ak8=@ak8, ek8=@ek8, ak32=@ak32, ek32=@ek32, po_number=@poNumber " +
                 "WHERE ak8=@oldAk8 AND ek8=@oldEk8 AND ak32=@oldAk32 AND ek32=@oldEk32", conn);
             
             cmd.Parameters.AddWithValue("@msn", updatedRow.Msn);
@@ -141,6 +145,7 @@ namespace PGen.Data
             cmd.Parameters.AddWithValue("@ek8", updatedRow.Ek8);
             cmd.Parameters.AddWithValue("@ak32", updatedRow.Ak32);
             cmd.Parameters.AddWithValue("@ek32", updatedRow.Ek32);
+            cmd.Parameters.AddWithValue("@poNumber", (object?)updatedRow.PoNumber ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@oldAk8", originalRow.Ak8);
             cmd.Parameters.AddWithValue("@oldEk8", originalRow.Ek8);
             cmd.Parameters.AddWithValue("@oldAk32", originalRow.Ak32);
@@ -159,7 +164,7 @@ namespace PGen.Data
             
             using var conn = Database.CreateConnection();
             using var cmd = new MySqlCommand(
-                "UPDATE meter_key_rows SET msn=@msn, meter_type=@meterType, model=@model, set_index=@setIndex, ak8=@ak8, ek8=@ek8, ak32=@ak32, ek32=@ek32 " +
+                "UPDATE meter_key_rows SET msn=@msn, meter_type=@meterType, model=@model, set_index=@setIndex, ak8=@ak8, ek8=@ek8, ak32=@ak32, ek32=@ek32, po_number=@poNumber " +
                 "WHERE ak8=@oldAk8 AND ek8=@oldEk8 AND ak32=@oldAk32 AND ek32=@oldEk32", conn);
             
             cmd.Parameters.AddWithValue("@msn", updatedRow.Msn);
@@ -170,6 +175,7 @@ namespace PGen.Data
             cmd.Parameters.AddWithValue("@ek8", updatedRow.Ek8);
             cmd.Parameters.AddWithValue("@ak32", updatedRow.Ak32);
             cmd.Parameters.AddWithValue("@ek32", updatedRow.Ek32);
+            cmd.Parameters.AddWithValue("@poNumber", (object?)updatedRow.PoNumber ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@oldAk8", originalRow.Ak8);
             cmd.Parameters.AddWithValue("@oldEk8", originalRow.Ek8);
             cmd.Parameters.AddWithValue("@oldAk32", originalRow.Ak32);
@@ -319,12 +325,15 @@ namespace PGen.Data
                 case "EK32":
                     where = "ek32 LIKE @pat";
                     break;
+                case "PO Number":
+                    where = "po_number LIKE @pat";
+                    break;
                 default:
-                    where = "(msn LIKE @pat OR meter_type LIKE @pat OR ak8 LIKE @pat OR ek8 LIKE @pat OR ak32 LIKE @pat OR ek32 LIKE @pat)";
+                    where = "(msn LIKE @pat OR meter_type LIKE @pat OR ak8 LIKE @pat OR ek8 LIKE @pat OR ak32 LIKE @pat OR ek32 LIKE @pat OR po_number LIKE @pat)";
                     break;
             }
 
-            cmd.CommandText = "SELECT msn,meter_type,model,set_index,ak8,ek8,ak32,ek32 FROM meter_key_rows WHERE " + where + " ORDER BY created_utc DESC LIMIT 1000";
+            cmd.CommandText = "SELECT msn,meter_type,model,set_index,ak8,ek8,ak32,ek32,po_number FROM meter_key_rows WHERE " + where + " ORDER BY created_utc DESC LIMIT 1000";
             cmd.Parameters.AddWithValue("@pat", pattern);
 
             await using var reader = await cmd.ExecuteReaderAsync();
@@ -340,6 +349,7 @@ namespace PGen.Data
                     Ek8 = await reader.IsDBNullAsync("ek8") ? string.Empty : reader.GetString("ek8"),
                     Ak32 = await reader.IsDBNullAsync("ak32") ? string.Empty : reader.GetString("ak32"),
                     Ek32 = await reader.IsDBNullAsync("ek32") ? string.Empty : reader.GetString("ek32"),
+                    PoNumber = await reader.IsDBNullAsync("po_number") ? null : reader.GetString("po_number"),
                 });
             }
 
@@ -381,12 +391,15 @@ namespace PGen.Data
                 case "EK32":
                     where = "ek32 LIKE @pat";
                     break;
+                case "PO Number":
+                    where = "po_number LIKE @pat";
+                    break;
                 default:
-                    where = "(msn LIKE @pat OR meter_type LIKE @pat OR ak8 LIKE @pat OR ek8 LIKE @pat OR ak32 LIKE @pat OR ek32 LIKE @pat)";
+                    where = "(msn LIKE @pat OR meter_type LIKE @pat OR ak8 LIKE @pat OR ek8 LIKE @pat OR ak32 LIKE @pat OR ek32 LIKE @pat OR po_number LIKE @pat)";
                     break;
             }
 
-            cmd.CommandText = "SELECT msn,meter_type,model,set_index,ak8,ek8,ak32,ek32 FROM meter_key_rows WHERE " + where + " ORDER BY created_utc DESC LIMIT 1000";
+            cmd.CommandText = "SELECT msn,meter_type,model,set_index,ak8,ek8,ak32,ek32,po_number FROM meter_key_rows WHERE " + where + " ORDER BY created_utc DESC LIMIT 1000";
             cmd.Parameters.AddWithValue("@pat", pattern);
 
             using var reader = cmd.ExecuteReader();
@@ -402,6 +415,7 @@ namespace PGen.Data
                     Ek8 = reader.IsDBNull("ek8") ? string.Empty : reader.GetString("ek8"),
                     Ak32 = reader.IsDBNull("ak32") ? string.Empty : reader.GetString("ak32"),
                     Ek32 = reader.IsDBNull("ek32") ? string.Empty : reader.GetString("ek32"),
+                    PoNumber = reader.IsDBNull("po_number") ? null : reader.GetString("po_number"),
                 });
             }
 

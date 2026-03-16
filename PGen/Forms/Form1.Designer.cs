@@ -31,8 +31,10 @@ namespace PGen
             lblMsn = new Label();
             lblType = new Label();
             lblSets = new Label();
+            lblPoNumber = new Label();
             grpInputs = new GroupBox();
             txtMsnOrRange = new TextBox();
+            txtPoNumber = new TextBox();
             cboMeterType = new ComboBox();
             numSets = new NumericUpDown();
             btnGenerate = new Button();
@@ -95,6 +97,15 @@ namespace PGen
             lblSets.TabIndex = 3;
             lblSets.Text = "Sets";
             // 
+            // lblPoNumber
+            // 
+            lblPoNumber.AutoSize = true;
+            lblPoNumber.Location = new Point(16, 75);
+            lblPoNumber.Name = "lblPoNumber";
+            lblPoNumber.Size = new Size(171, 20);
+            lblPoNumber.TabIndex = 4;
+            lblPoNumber.Text = "PO Number";
+            // 
             // grpInputs
             // 
             grpInputs.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
@@ -104,13 +115,15 @@ namespace PGen
             grpInputs.Controls.Add(cboMeterType);
             grpInputs.Controls.Add(lblSets);
             grpInputs.Controls.Add(numSets);
+            grpInputs.Controls.Add(lblPoNumber);
+            grpInputs.Controls.Add(txtPoNumber);
             grpInputs.Controls.Add(btnGenerate);
             grpInputs.Controls.Add(btnCancel);
             grpInputs.Location = new Point(14, 34);
             grpInputs.Margin = new Padding(3, 4, 3, 4);
             grpInputs.Name = "grpInputs";
             grpInputs.Padding = new Padding(3, 4, 3, 4);
-            grpInputs.Size = new Size(1326, 145);
+            grpInputs.Size = new Size(1326, 175);
             grpInputs.TabIndex = 0;
             grpInputs.TabStop = false;
             grpInputs.Text = "Keys Generation";
@@ -123,6 +136,15 @@ namespace PGen
             txtMsnOrRange.PlaceholderText = "Example: 00001234 or 00001234-00001300";
             txtMsnOrRange.Size = new Size(594, 27);
             txtMsnOrRange.TabIndex = 1;
+            // 
+            // txtPoNumber
+            // 
+            txtPoNumber.Location = new Point(194, 71);
+            txtPoNumber.Margin = new Padding(3, 4, 3, 4);
+            txtPoNumber.Name = "txtPoNumber";
+            txtPoNumber.PlaceholderText = "Example: PO-12345 or PUR-2023-001";
+            txtPoNumber.Size = new Size(594, 27);
+            txtPoNumber.TabIndex = 5;
             // 
             // cboMeterType
             // 
@@ -272,7 +294,7 @@ namespace PGen
             // 
             cboFilterField.DropDownStyle = ComboBoxStyle.DropDownList;
             cboFilterField.FormattingEnabled = true;
-            cboFilterField.Items.AddRange(new object[] { "All Fields", "MSN", "Type", "AK8", "EK8", "AK32", "EK32" });
+            cboFilterField.Items.AddRange(new object[] { "All Fields", "MSN", "Type", "AK8", "EK8", "AK32", "EK32", "PO Number" });
             cboFilterField.Location = new Point(543, 32);
             cboFilterField.Margin = new Padding(3, 4, 3, 4);
             cboFilterField.Name = "cboFilterField";
@@ -300,7 +322,7 @@ namespace PGen
             dgvResults.Location = new Point(14, 360);
             dgvResults.Margin = new Padding(3, 4, 3, 4);
             dgvResults.Name = "dgvResults";
-            dgvResults.ReadOnly = true;
+            dgvResults.ReadOnly = false;
             dgvResults.RowHeadersVisible = false;
             dgvResults.RowHeadersWidth = 51;
             dgvResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -418,6 +440,7 @@ namespace PGen
         #endregion
 
         private System.Windows.Forms.TextBox txtMsnOrRange;
+        private System.Windows.Forms.TextBox txtPoNumber;
         private System.Windows.Forms.ComboBox cboMeterType;
 
         private System.Windows.Forms.NumericUpDown numSets;
@@ -444,6 +467,7 @@ namespace PGen
         private Label lblType;
 
         private Label lblSets;
+        private Label lblPoNumber;
         private GroupBox grpInputs;
         private GroupBox grpSecurity;
         private Label lblMachine;

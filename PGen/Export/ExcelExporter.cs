@@ -22,10 +22,9 @@ internal static class ExcelExporter
             maxSet = grouped.SelectMany(g => g).Select(s => s.SetIndex).DefaultIfEmpty(0).Max();
         }
 
-        // Create headers matching GridView format
+        // Create headers matching GridView format (without Meter Type)
         var col = 1;
         ws.Cell(1, col++).Value = "MSN";
-        ws.Cell(1, col++).Value = "Type";
         for (var i = 1; i <= maxSet; i++)
         {
             ws.Cell(1, col++).Value = $"AK8({i})";
@@ -40,7 +39,6 @@ internal static class ExcelExporter
         {
             col = 1;
             ws.Cell(row, col++).Value = group.Key.Msn;
-            ws.Cell(row, col++).Value = group.Key.MeterType;
 
             var setByIndex = group.ToDictionary(r => r.SetIndex);
             for (var i = 1; i <= maxSet; i++)
@@ -84,10 +82,9 @@ internal static class ExcelExporter
             maxSet = grouped.SelectMany(g => g).Select(s => s.SetIndex).DefaultIfEmpty(0).Max();
         }
 
-        // Create headers matching GridView format
+        // Create headers matching GridView format (without Meter Type)
         var col = 1;
         ws.Cell(1, col++).Value = "MSN";
-        ws.Cell(1, col++).Value = "Type";
         for (var i = 1; i <= maxSet; i++)
         {
             ws.Cell(1, col++).Value = $"AK32({i})";
@@ -102,7 +99,6 @@ internal static class ExcelExporter
         {
             col = 1;
             ws.Cell(row, col++).Value = group.Key.Msn;
-            ws.Cell(row, col++).Value = group.Key.MeterType;
 
             var setByIndex = group.ToDictionary(r => r.SetIndex);
             for (var i = 1; i <= maxSet; i++)
