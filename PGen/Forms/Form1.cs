@@ -102,12 +102,15 @@ namespace PGen
             {
                 ["2997"] = new[] { "1P GPRS", "1P NON AMR" },
                 ["2998"] = new[] { "3P WC GPRS UNI", "3P WC GPRS BI", "3P WC NO AMR UNI", "3P WC NO AMR BI" },
-                ["2999"] = new[] { "LT/HT GPRS UNI", "LT/HT GPRS BI", "LT NON AMR", "HT NON AMR", "SMCD", "P202" }
+                ["2999"] = new[] { "LT/HT GPRS UNI", "LT/HT GPRS BI", "LT NON AMR", "HT NON AMR", "SMCD", "P202" },
+                ["DEFAULT"] = new[] { "1P NON AMR", "3P WC NO AMR UNI", "3P WC NO AMR BI", "LT NON AMR", "HT NON AMR", "SMCD", "P202" }
+
             };
 
             if (!prefixGroups.TryGetValue(msnPrefix, out var allowedTypes))
-                return allMeterTypes.ToArray(); // Return all types for unknown prefixes
-
+            {
+                allowedTypes = prefixGroups["DEFAULT"];
+            }
             // Filter database meter types to only include those that match allowed types for this prefix
             var filteredTypes = allMeterTypes
                 .Where(type => allowedTypes.Contains(type))
@@ -398,15 +401,15 @@ namespace PGen
 
             var rbMDC = new RadioButton()
             {
-                Text = "MDC (All Sets)",
+                Text = "MDC (First Set Only)",
                 Location = new Point(20, 25),
-                Size = new Size(120, 20),
+                Size = new Size(180, 20),
                 Checked = true
             };
 
             var rbMeter = new RadioButton()
             {
-                Text = "Meter (First Set Only)",
+                Text = "Meter (All Sets)",
                 Location = new Point(20, 50),
                 Size = new Size(180, 20)
             };
@@ -459,16 +462,16 @@ namespace PGen
                 
                 if (isMeter)
                 {
-                    // For Meter export, only include first set from each group
-                    var meterRows = _groupedRowsForActions.Select(g => g.Sets.FirstOrDefault(s => s.SetIndex == 1)).Where(s => s != null).ToList();
-                    ExcelExporter.Export32Digit(sfd.FileName, meterRows);
-                    toolStatus.Text = $"Exported: {Path.GetFileName(sfd.FileName)} ({meterRows.Count} rows - Meter format)";
+                    // For Meter export,  include all sets
+                    ExcelExporter.Export32Digit(sfd.FileName, visibleRows);
+                    toolStatus.Text = $"Exported: {Path.GetFileName(sfd.FileName)} ({visibleRows.Count} rows - Meter format)";
                 }
                 else
                 {
-                    // For MDC export, include all sets
-                    ExcelExporter.Export32Digit(sfd.FileName, visibleRows);
-                    toolStatus.Text = $"Exported: {Path.GetFileName(sfd.FileName)} ({visibleRows.Count} rows - MDC format)";
+                    // For MDC export, only include first set from each group
+                    var meterRows = _groupedRowsForActions.Select(g => g.Sets.FirstOrDefault(s => s.SetIndex == 1)).Where(s => s != null).ToList();
+                    ExcelExporter.Export32Digit(sfd.FileName, meterRows);
+                    toolStatus.Text = $"Exported: {Path.GetFileName(sfd.FileName)} ({meterRows.Count} rows - MDC format)";
                 }
             }
             catch (Exception ex)
